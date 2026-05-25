@@ -8,7 +8,7 @@
     <title>Up and Down the Abstraction Ladder</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,8 +18,9 @@
             <div class="nav">
                 <a href="#abstract">Abstract</a>
                 <a href="#motivation">Motivation</a>
-                <a href="#method">Approach</a>
-                <a href="#results">Results</a>
+                <a href="#method">Method</a>
+                <a href="#experiments">Experiments</a>
+                <a href="#rollouts">Rollouts</a>
                 <a href="#citation">Citation</a>
             </div>
         </div>
@@ -32,14 +33,14 @@
                 <h1>Up and Down the Abstraction Ladder</h1>
             </div>
             <p class="subtitle">
-                We study when language agents should act through low-level primitives, reusable code skills,
-                or both, using CodeHack as an intermediate control layer for NetHack and MiniHack.
+                We study the benefits and tradeoffs of using low-level primitives, higher-level
+                code skills, or both for long-horizon language agents.
             </p>
 
             <p class="authors">
                 <span class="author-item" tabindex="0">Bartłomiej Cupiał<sup>1,6</sup><span class="author-affiliations" role="tooltip"><sup>1</sup> University of Warsaw<br><sup>6</sup> AKCES NCBR</span></span>,
                 <span class="author-item" tabindex="0">Jens Tuyls<sup>2</sup><span class="author-affiliations" role="tooltip"><sup>2</sup> Princeton University</span></span>,
-                <span class="author-item" tabindex="0">Maciej Wolczyk<sup>3</sup><span class="author-affiliations" role="tooltip"><sup>3</sup> IDEAS NCBR </span></span>,
+                <span class="author-item" tabindex="0">Maciej Wolczyk<sup>3</sup><span class="author-affiliations" role="tooltip"><sup>3</sup> IDEAS NCBR</span></span>,
                 <span class="author-item" tabindex="0">Davide Paglieri<sup>4</sup><span class="author-affiliations" role="tooltip"><sup>4</sup> Google DeepMind</span></span>,
                 <span class="author-item" tabindex="0">Martin Klissarov<sup>4</sup><span class="author-affiliations" role="tooltip"><sup>4</sup> Google DeepMind</span></span>,
                 <span class="author-item" tabindex="0">Benjamin Eysenbach<sup>2</sup><span class="author-affiliations" role="tooltip"><sup>2</sup> Princeton University</span></span>,
@@ -60,26 +61,33 @@
                 <div class="section-head">
                     <div>
                         <p class="kicker">Abstract</p>
-                        <h2>In NetHack and MiniHack, code skills help agents progress deeper, spend less, and learn faster.</h2>
+                        <h2>In NetHack and MiniHack, code skills improve progression, reduce inference cost, and accelerate learning.</h2>
                     </div>
-                    <p class="section-copy">
-                        The core question is whether language agents should stay at one level of action
-                        abstraction, or move flexibly between primitive commands and semantic skills.
-                    </p>
                 </div>
 
-                <p class="abstract">
-                    Acting and learning in long-horizon environments remains challenging for language agents,
-                    especially on tasks requiring low-level action control such as games. We study the value of
-                    higher-level, semantically meaningful code skills in addition to or instead of low-level
-                    primitives. To do so, we develop CodeHack, a rich library of code-based skills with
-                    natural-language descriptions for NetHack and MiniHack. In our evaluations across
-                    zero-shot prompting, supervised fine-tuning, and reinforcement learning, skill-based
-                    interfaces improve game progression, reduce estimated inference cost, and accelerate
-                    learning relative to primitive-only control. Mixed control retains much of the skill
-                    benefit while preserving a path back down to primitive actions when abstractions are
-                    insufficient.
-                </p>
+                <div class="abstract-layout">
+                    <div class="story-text">
+                        <p>
+                            <strong>Acting and learning in long-horizon environments remains challenging for language agents</strong>, especially on tasks requiring low-level action control such as games. Primitive action control often provides poor grounding for language models and, when combined with long horizons, can be prohibitively expensive and hinder learning, exploration, and planning.
+                        </p>
+                        <p>
+                            Inspired by work on agent interfaces and horizon reduction, we study the value of using <strong>higher-level, semantically meaningful code skills</strong> in addition to or instead of low-level primitives. We develop CodeHack, a rich library of code-based skills with natural-language descriptions, and compare agents that can only use primitive actions, only use semantic skills, or use both.
+                        </p>
+                        <p>
+                            We evaluate these agents in three settings: zero-shot prompting, supervised fine-tuning, and reinforcement learning. Averaged across a broad zero-shot NetHack evaluation, skills provide <strong>over 3x improvement in game progression</strong> while cutting inference costs per episode by <strong>86%</strong>. Mixed control retains much of this benefit while preserving a path back down to low-level actions, and in RL, skill-based agents learn significantly faster than agents acting on primitives.
+                        </p>
+                    </div>
+
+                    <div>
+                        <div class="figure-frame teaser-frame">
+                            <img src="figures/teaser.png" alt="Skills improve NetHack performance in zero-shot use and during reinforcement learning">
+                        </div>
+                        <div class="figure-caption teaser-caption">
+                            <h3>Skills vs. primitives in NetHack</h3>
+                            <p>Higher-level, semantically meaningful skills provided by CodeHack improve performance both in zero-shot use and during RL. Learning curves are for Qwen-3.5-4B.</p>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="metrics" aria-label="Main result highlights">
                     <div class="metric">
@@ -101,48 +109,6 @@
             </div>
         </section>
 
-        <section id="rollouts">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="kicker">Rollouts</p>
-                        <h2>Watch CodeHack agents move through NetHack and MiniHack.</h2>
-                    </div>
-                    <p class="section-copy">
-                        These rollouts show how code skills expand one high-level choice into many environment
-                        actions, while mixed control lets the agent drop back to primitives when the situation calls for it.
-                    </p>
-                </div>
-
-                <div class="demo-grid">
-                    <article class="demo-card">
-                        <span class="coming-soon">Rollout video</span>
-                        <img src="figures/nethack_1.png" alt="NetHack game state from an agent rollout" loading="lazy">
-                        <div class="demo-caption">
-                            <h3>NetHack exploration</h3>
-                            <p>The agent uses semantic exploration skills to traverse rooms, follow corridors, and keep progress moving across long episodes.</p>
-                        </div>
-                    </article>
-                    <article class="demo-card">
-                        <span class="coming-soon">Rollout video</span>
-                        <img src="figures/nethack_2.png" alt="NetHack game state with agent control" loading="lazy">
-                        <div class="demo-caption">
-                            <h3>Mixed control</h3>
-                            <p>The controller alternates between reusable skills and local primitive actions when high-level routines need fine-grained correction.</p>
-                        </div>
-                    </article>
-                    <article class="demo-card">
-                        <span class="coming-soon">Rollout video</span>
-                        <img src="figures/minihack_wod_hard.jpg" alt="MiniHack Wand of Death task layout" loading="lazy">
-                        <div class="demo-caption">
-                            <h3>MiniHack tasks</h3>
-                            <p>MiniHack videos highlight targeted behaviors such as navigation, combat, item use, and exploration under controlled task layouts.</p>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
         <section id="motivation">
             <div class="container">
                 <div class="section-head">
@@ -150,32 +116,22 @@
                         <p class="kicker">Motivation</p>
                         <h2>Why climb the abstraction ladder?</h2>
                     </div>
-                    <p class="section-copy">
-                        Long-horizon agents must adapt across changing contexts, recover from
-                        errors, and use their inference budgets carefully.
-                    </p>
                 </div>
 
-                <p class="abstract">
-                    As language models become autonomous agents, they are increasingly asked to solve
-                    complex, long-horizon problems in software engineering, computer use, games, and
-                    embodied control. Success in these settings requires extended interaction, adaptation
-                    to changing contexts, recovery from mistakes, and careful use of inference budget. Yet
-                    many agents still operate through low-level action interfaces, where even simple
-                    behaviors expand into long, brittle sequences of small decisions. Coding agents make
-                    this tension concrete: an agent forced to type one keystroke at a time would spend its
-                    reasoning budget on mechanics rather than design, while real programmers rely on
-                    functions, libraries, tools, and editor commands that package many low-level operations
-                    into meaningful units. Similar needs arise beyond software, where reusable routines can
-                    handle common behavior but fine-grained control is still needed when a routine fails in
-                    an unusual state. We study this abstraction tradeoff in NetHack and MiniHack through
-                    CodeHack, a library of temporally extended code skills that can be described in language,
-                    inspected as source code, executed cheaply, and combined with primitive actions.
-                    NetHack is a useful testbed because agents must act under partial observability, switch
-                    between exploration, navigation, combat, resource management, and tool use, and recover
-                    from local failures. This makes pure skill abstraction incomplete in practice and motivates
-                    agents that can move flexibly up and down the abstraction ladder.
-                </p>
+                <div class="story-text">
+                    <p>
+                        As language models transition into autonomous agents, they are increasingly tasked with complex, long-horizon problems, ranging from software engineering and computer use to embodied control. To succeed in these environments, agents must manage extended interactions, adapt to shifting contexts, and recover from inevitable errors, all while carefully managing their inference budgets.
+                    </p>
+                    <p>
+                        Despite this, most agents are still forced to operate through low-level action interfaces, expanding simple behaviors into long sequences of brittle, error-prone decisions. Agentic coding systems make this tension concrete: if a coding agent had to generate one keystroke at a time, it would risk wasting its reasoning budget on mechanics rather than design. In practice, programmers and coding agents rely on functions, libraries, tools, and editor commands that package many low-level operations into semantically meaningful units.
+                    </p>
+                    <p>
+                        This suggests a central question for long-horizon language agents: <strong>what are the benefits and tradeoffs of using primitive actions, higher-level skills, or both?</strong> We study this question through temporally extended code-based actions, or skills. Code-based skills are natural for language agents: they can be described in language, inspected as source code, executed cheaply on the CPU, and combined with primitive actions when finer control is needed.
+                    </p>
+                    <p>
+                        We use NetHack as our main domain because it captures much of the structure of real long-horizon agentic tasks: agents must act under partial observability, adapt across changing contexts, recover from mistakes, and repeatedly switch among qualitatively different modes of behavior such as exploration, navigation, combat, resource management, and tool use. This complexity also makes pure skill abstraction incomplete in practice, motivating agents that can <strong>move flexibly up and down the abstraction ladder</strong>.
+                    </p>
+                </div>
             </div>
         </section>
 
@@ -183,12 +139,17 @@
             <div class="container">
                 <div class="section-head">
                     <div>
-                        <p class="kicker">Approach</p>
+                        <p class="kicker">Method</p>
                         <h2>CodeHack turns one skill call into many game actions.</h2>
                     </div>
-                    <p class="section-copy">
-                        CodeHack is an intermediate control layer between a language-model or RL controller
-                        and the NetHack or MiniHack environment.
+                </div>
+
+                <div class="story-text">
+                    <p>
+                        CodeHack is a library of Python skills that sits between a controller and the NetHack or MiniHack environment. Each skill maps the current symbolic game state to a sequence of primitive commands, such as movement, inventory interactions, prompt responses, or combat actions. The controller still makes the high-level decision, but repeated low-level mechanics can run through cheap, inspectable code.
+                    </p>
+                    <p>
+                        The same runtime exposes three action interfaces: primitive-only, skill-only, and mixed. This lets the paper compare abstraction levels while keeping the environment and evaluation protocol fixed. Skills return control when they finish, fail, trigger a panic handler such as damage or a newly reachable hostile monster, or make no progress, giving the outer controller a chance to choose another action.
                     </p>
                 </div>
 
@@ -196,10 +157,11 @@
                     <figure class="paper-figure">
                         <img src="figures/codehack_v4.png" alt="CodeHack as an intermediate control layer between controllers and NetHack or MiniHack environments">
                         <figcaption>
-                            CodeHack exposes the same environment through primitive-only, skill-only,
-                            and mixed interfaces. A controller selects either a semantic code skill or a primitive
-                            action; the runtime maintains game state, expands skills into primitive environment
-                            steps, and returns observations and execution feedback.
+                            CodeHack is an intermediate control layer between a controller and NetHack or MiniHack.
+                            The controller selects either an abstract code skill, such as explore or fight_melee, or a
+                            low-level primitive action. The runtime maintains symbolic state, inventory tracking, map
+                            memory, pathfinding, panic handlers, and no-progress feedback while expanding skills into
+                            primitive environment steps.
                         </figcaption>
                     </figure>
 
@@ -210,82 +172,142 @@
                         </article>
                         <article class="principle">
                             <h3>Reusable code skills</h3>
-                            <p>Each skill is a testable Python procedure that can run across many states, layouts, and episodes.</p>
+                            <p>Skills are reusable across many states and episodes, functioning as stable units of abstraction rather than narrow scripts.</p>
                         </article>
                         <article class="principle">
                             <h3>Mixed abstraction levels</h3>
-                            <p>Agents can move back down to primitive control when high-level abstractions are incomplete or fail locally.</p>
+                            <p>The interface supports moving up and down the ladder, so skills accelerate long-horizon behavior without removing local intervention.</p>
                         </article>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="rl-results" class="result-section rl-section">
+        <section id="experiments">
             <div class="container">
-                <div class="result-subhead">
+                <div class="section-head">
                     <div>
-                        <p class="kicker">RL Training</p>
-                        <h2>CodeHack skills improve NetHack performance in zero-shot use and during RL.</h2>
+                        <p class="kicker">Experiments</p>
+                        <h2>We test how skills affect zero-shot performance, inference cost, mixed control, and RL.</h2>
                     </div>
+                </div>
+
+                <div class="story-text">
                     <p>
-                        Higher-level, semantically meaningful skills improve progression over primitive
-                        actions, and the Qwen-3.5-4B learning curves show this advantage during training.
+                        The experiments evaluate the same action-interface choices in zero-shot prompting, supervised fine-tuning, and reinforcement learning. MiniHack provides controlled tasks for navigation, exploration, combat, item use, and subgoal sequencing, while NetHackScore-v0 serves as the main long-horizon testbed. The paper tracks MiniHack success rate and NetHack score, progression, dungeon depth, token use, and estimated inference cost.
                     </p>
                 </div>
 
-                <div class="figure-frame rl-frame">
-                    <img src="figures/teaser.png" alt="RL training curve comparing skill-based and primitive-only progression">
-                </div>
-                <div class="figure-caption rl-caption">
-                    <h3>Skills vs. primitives in NetHack</h3>
-                    <p>The value of skills vs. primitives for language agents in NetHack. Higher-level, semantically meaningful skills provided by CodeHack improve performance both in zero-shot use and during RL. Learning curves are for Qwen-3.5-4B.</p>
-                </div>
+                <article class="experiment-block" id="zero-shot-results">
+                    <div class="result-subhead">
+                        <div>
+                            <p class="kicker">Zero-Shot Evaluation</p>
+                            <h2>Across NetHack and MiniHack environments, skills provide consistent boosts in game progress.</h2>
+                        </div>
+                    </div>
+
+                    <p class="result-copy">
+                        With GPT-5 on MiniHack, CodeHack skills improve success on every task and produce a 55 percentage-point average absolute gain over primitive control. Quest-Hard is the sharpest example: skill control reaches 25% success, while primitive control solves no episodes. In the broader NetHack sweep across 14 models and five model families, skill-only agents achieve 3.4x higher progression, 4.3x higher score, and about 2.7x deeper dungeon reach than primitive-only agents.
+                    </p>
+
+                    <div class="figure-frame">
+                        <img src="figures/nethack_minihack_combined_barplots_v2.png" alt="Zero-shot MiniHack and NetHack results comparing skills and primitives">
+                    </div>
+                    <div class="figure-caption">
+                        <h3>Zero-shot results across MiniHack and NetHack</h3>
+                        <p>Left: MiniHack success rates for GPT-5. Right: NetHack milestone reach for GPT-5. Both plots present averages over 32 episodes per task.</p>
+                    </div>
+                </article>
+
+                <article class="experiment-block" id="cost-results">
+                    <div class="result-subhead">
+                        <div>
+                            <p class="kicker">Cost-Performance Frontier</p>
+                            <h2>Skills are not only stronger; they also spend fewer model calls on mechanics.</h2>
+                        </div>
+                    </div>
+
+
+                    <p class="result-copy">
+                        Skills improve the frontier by replacing many expensive language-model decisions with CPU execution inside the CodeHack runtime. Across the zero-shot NetHack sweep, skill-only control reduces estimated cost per episode by 86% and token use by 70% compared with primitives. Mixed control remains far stronger and cheaper than primitive-only play, while preserving a path back to low-level actions when a skill is not the right fit.
+                    </p>
+
+                    <div class="figure-frame">
+                        <img src="figures/nethack_zero_shot_dlvl_vs_cost_v4.png" alt="Cost-performance frontier plotting dungeon level against inference cost">
+                    </div>
+                    <div class="figure-caption">
+                        <h3>Zero-shot NetHack cost-performance frontier</h3>
+                        <p>Each point corresponds to a model-interface pair and plots average dungeon level reached against average inference cost per episode. Skill-based agents define the strongest frontier, while mixed control is typically intermediate.</p>
+                    </div>
+                </article>
+
+                <article class="experiment-block" id="rl-results">
+                    <div class="result-subhead">
+                        <div>
+                            <p class="kicker">RL Training</p>
+                            <h2>Skills also help learned controllers by shortening the effective horizon.</h2>
+                        </div>
+                    </div>
+
+
+                    <p class="result-copy">
+                        PPO training on Llama-3.1-8B-Instruct and Qwen-3.5-4B shows that abstraction helps learned controllers too. Under the same training budget, skill-only control produces a 5.1x larger gain in dungeon level than primitive-only control, and mixed control reaches a 6.5x larger gain. Supervised fine-tuning on teacher trajectories followed by RL produces the strongest learned skill controllers reported in the paper, but the central pattern is already visible from RL alone: shorter effective horizons make learning faster.
+                    </p>
+
+                    <div class="figure-frame">
+                        <img src="figures/rl_progression_score_max_dlvl_vs_agent_steps_qwen3p5_4b.png" alt="RL training curves comparing skills, primitives, and mixed control">
+                    </div>
+                    <div class="figure-caption">
+                        <h3>RL training curves for Qwen-3.5-4B</h3>
+                        <p>Training curves compare action interfaces over the same PPO budget. Skill-based and mixed interfaces improve progression and dungeon depth faster than primitive-only control.</p>
+                    </div>
+                </article>
             </div>
         </section>
 
-        <section id="results" class="result-section">
+        <section id="rollouts">
             <div class="container">
-                <div class="result-subhead">
+                <div class="section-head">
                     <div>
-                        <p class="kicker">Zero-Shot Evaluation</p>
-                        <h2>For GPT-5 zero-shot, skills improve MiniHack success and NetHack milestone reach.</h2>
+                        <p class="kicker">Rollouts</p>
+                        <h2>Watch what the abstractions look like in motion.</h2>
                     </div>
+                </div>
+
+                <div class="story-text">
                     <p>
-                        In the controlled MiniHack suite and NetHack milestone evaluation, GPT-5 succeeds
-                        more often with skills and reaches deeper milestones than with primitive-only control.
+                        These examples show temporally extended code-based actions in familiar NetHack and MiniHack
+                        situations. They also illustrate why mixed control matters: high-level skills can accelerate
+                        repeated behaviors, but the controller still needs a path back to primitive actions when
+                        abstractions are insufficient.
                     </p>
                 </div>
 
-                <div class="figure-frame">
-                    <img src="figures/nethack_minihack_combined_barplots_v2.png" alt="Zero-shot MiniHack and NetHack results comparing skills and primitives">
-                </div>
-                <div class="figure-caption">
-                    <h3>Zero-shot results across MiniHack and NetHack</h3>
-                    <p>Zero-shot results across the two evaluation domains. Left: MiniHack success rates for GPT-5, used as a controlled testbed for diagnosing failures of primitive control. Right: NetHack milestone reach for GPT-5, showing that skill-based control consistently reaches substantially deeper milestones than primitive-only control. Both plots present averages over 32 episodes per task.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="result-section" id="cost-results">
-            <div class="container">
-                <div class="result-subhead">
-                    <div>
-                        <p class="kicker">Cost-Performance Frontier</p>
-                        <h2>In the 14-model sweep, skills generally reach deeper dungeon levels at lower or comparable cost.</h2>
-                    </div>
-                    <p>
-                        Cost is estimated from token prices. Skills reduce model calls by executing many
-                        low-level steps locally inside the CodeHack runtime.
-                    </p>
-                </div>
-
-                <div class="figure-frame">
-                    <img src="figures/nethack_zero_shot_dlvl_vs_cost_v4.png" alt="Cost-performance frontier plotting dungeon level against inference cost">
-                </div>
-                <div class="figure-caption">
-                    <h3>Zero-shot NetHack cost-performance frontier</h3>
-                    <p>Each point corresponds to a model-interface pair and plots average dungeon level reached against average inference cost per episode. Skill-based agents define the strongest frontier, generally reaching substantially deeper dungeon levels at lower or comparable cost than primitive-only agents, while mixed control is typically intermediate.</p>
+                <div class="demo-grid">
+                    <article class="demo-card">
+                        <span class="coming-soon">Rollout preview</span>
+                        <img src="figures/nethack_1.png" alt="NetHack game state from an agent rollout" loading="lazy">
+                        <div class="demo-caption">
+                            <h3>NetHack exploration</h3>
+                            <p>The agent uses semantic exploration skills to traverse rooms, follow corridors, and keep progress moving across long episodes.</p>
+                        </div>
+                    </article>
+                    <article class="demo-card">
+                        <span class="coming-soon">Rollout preview</span>
+                        <img src="figures/nethack_2.png" alt="NetHack game state with agent control" loading="lazy">
+                        <div class="demo-caption">
+                            <h3>Mixed control</h3>
+                            <p>The controller alternates between reusable skills and local primitive actions when high-level routines need fine-grained correction.</p>
+                        </div>
+                    </article>
+                    <article class="demo-card">
+                        <span class="coming-soon">Rollout preview</span>
+                        <img src="figures/minihack_wod_hard.jpg" alt="MiniHack Wand of Death task layout" loading="lazy">
+                        <div class="demo-caption">
+                            <h3>MiniHack tasks</h3>
+                            <p>MiniHack examples highlight targeted behaviors such as navigation, combat, item use, and exploration under controlled task layouts.</p>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -297,9 +319,6 @@
                         <p class="kicker">Citation</p>
                         <h2>Cite this work.</h2>
                     </div>
-                    <p class="section-copy">
-                        If you use this repository in your work or otherwise wish to cite it, use the BibTeX entry below.
-                    </p>
                 </div>
 
                 <pre><code>@misc{cupial2026abstractionladder,
