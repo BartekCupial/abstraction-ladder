@@ -424,21 +424,21 @@ h3 {
     font-size: 0.94rem;
 }
 
-.teaser-section {
+.rl-section {
     padding: 58px 0;
 }
 
-.teaser-frame,
-.teaser-caption {
-    width: min(820px, 100%);
-    margin: 0 auto;
+.rl-frame,
+.rl-caption {
+    width: min(740px, 100%);
+    margin: 0;
 }
 
-.teaser-frame {
+.rl-frame {
     box-shadow: var(--shadow);
 }
 
-.teaser-caption {
+.rl-caption {
     padding-inline: 0;
 }
 
@@ -532,12 +532,12 @@ footer {
         grid-template-columns: 1fr;
     }
 
-    .teaser-section {
+    .rl-section {
         padding: 36px 0;
     }
 
-    .teaser-frame,
-    .teaser-caption {
+    .rl-frame,
+    .rl-caption {
         width: 100%;
     }
 }

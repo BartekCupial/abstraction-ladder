@@ -221,26 +221,25 @@
             </div>
         </section>
 
-        <section id="teaser" class="result-section teaser-section">
+        <section id="rl-results" class="result-section rl-section">
             <div class="container">
                 <div class="result-subhead">
                     <div>
-                        <p class="kicker">Teaser Result</p>
-                        <h2>Skill-based control learns to progress much faster than primitive-only control.</h2>
+                        <p class="kicker">RL Training</p>
+                        <h2>CodeHack skills improve NetHack performance in zero-shot use and during RL.</h2>
                     </div>
                     <p>
-                        This compact teaser previews the training result: reusable code skills give
-                        controllers longer-horizon behavior early, while primitive-only agents spend much
-                        more of their budget on low-level action selection.
+                        Higher-level, semantically meaningful skills improve progression over primitive
+                        actions, and the Qwen-3.5-4B learning curves show this advantage during training.
                     </p>
                 </div>
 
-                <div class="figure-frame teaser-frame">
-                    <img src="figures/teaser.png" alt="Teaser training curve comparing skill-based and primitive-only progression">
+                <div class="figure-frame rl-frame">
+                    <img src="figures/teaser.png" alt="RL training curve comparing skill-based and primitive-only progression">
                 </div>
-                <div class="figure-caption teaser-caption">
-                    <h3>Teaser training curve</h3>
-                    <p>Skills reach higher progression with fewer training frames than primitive-only control, with the dashed line marking the GPT-5 zero-shot reference.</p>
+                <div class="figure-caption rl-caption">
+                    <h3>Skills vs. primitives in NetHack</h3>
+                    <p>The value of skills vs. primitives for language agents in NetHack. Higher-level, semantically meaningful skills provided by CodeHack improve performance both in zero-shot use and during RL. Learning curves are for Qwen-3.5-4B.</p>
                 </div>
             </div>
         </section>
@@ -263,7 +262,7 @@
                 </div>
                 <div class="figure-caption">
                     <h3>Zero-shot results across MiniHack and NetHack</h3>
-                    <p>With GPT-5, skills produce higher MiniHack success rates and NetHack milestone reach than primitive-only control across the evaluated tasks.</p>
+                    <p>Zero-shot results across the two evaluation domains. Left: MiniHack success rates for GPT-5, used as a controlled testbed for diagnosing failures of primitive control. Right: NetHack milestone reach for GPT-5, showing that skill-based control consistently reaches substantially deeper milestones than primitive-only control. Both plots present averages over 32 episodes per task.</p>
                 </div>
             </div>
         </section>
@@ -286,7 +285,7 @@
                 </div>
                 <div class="figure-caption">
                     <h3>Zero-shot NetHack cost-performance frontier</h3>
-                    <p>Skill-based agents generally move the frontier upward and left relative to primitive-only control.</p>
+                    <p>Each point corresponds to a model-interface pair and plots average dungeon level reached against average inference cost per episode. Skill-based agents define the strongest frontier, generally reaching substantially deeper dungeon levels at lower or comparable cost than primitive-only agents, while mixed control is typically intermediate.</p>
                 </div>
             </div>
         </section>
