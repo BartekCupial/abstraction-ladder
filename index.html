@@ -459,24 +459,61 @@
                 </article>
 
                 <article class="mixed-control-feature">
-                    <div class="video-shell mixed-control-video">
-                        <video controls muted playsinline preload="metadata"
-                            aria-label="GPT-5 recovers from a failed NetHack skill using primitive actions">
-                            <source src="gpt5_video_showcase/01_nethack_mixed_control.mp4" type="video/mp4">
-                            Your browser does not support embedded video.
-                        </video>
-                        <span class="video-index">03</span>
-                    </div>
-                    <div class="mixed-control-copy">
-                        <p class="kicker">Mixed control</p>
-                        <h3>When a skill fails, the agent moves down the abstraction ladder.</h3>
-                        <p>Ranged combat runs out of ammunition. GPT-5 switches to primitive inputs, kills the gas spore, then returns to a high-level pickup skill.</p>
+                    <div class="mixed-control-heading">
+                        <div class="feature-heading">
+                            <span class="video-index static">03</span>
+                            <div>
+                                <p class="kicker">Mixed control</p>
+                                <h3>When skills are insufficient, the agent moves down the abstraction ladder.</h3>
+                                <p>Two examples show primitive actions acting as an escape hatch: first after a skill fails, and then when the required behavior is missing from the skill library.</p>
+                            </div>
+                        </div>
                         <div class="abstraction-sequence" aria-label="Skill, then primitive recovery, then skill">
                             <span>Skill</span>
                             <span aria-hidden="true">→</span>
                             <span class="primitive-step">Primitives</span>
                             <span aria-hidden="true">→</span>
                             <span>Skill</span>
+                        </div>
+                    </div>
+
+                    <div class="mixed-control-videos">
+                        <div class="mixed-control-example">
+                            <div class="video-shell mixed-control-video">
+                                <video controls muted playsinline preload="metadata"
+                                    aria-label="GPT-5 recovers from a failed NetHack skill using primitive actions">
+                                    <source src="gpt5_video_showcase/01_nethack_mixed_control.mp4" type="video/mp4">
+                                    Your browser does not support embedded video.
+                                </video>
+                            </div>
+                            <div class="mixed-control-caption">
+                                <div class="video-meta">
+                                    <span>Failed skill</span>
+                                    <span>Primitive recovery</span>
+                                    <span>9 sec</span>
+                                </div>
+                                <h4>Recovering after ranged combat fails</h4>
+                                <p>Ranged combat runs out of ammunition. GPT-5 switches to primitive inputs, kills the gas spore, then returns to a high-level pickup skill.</p>
+                            </div>
+                        </div>
+
+                        <div class="mixed-control-example">
+                            <div class="video-shell mixed-control-video">
+                                <video controls muted playsinline preload="metadata"
+                                    aria-label="GPT-5 uses primitive actions to drop gold for a NetHack vault guard">
+                                    <source src="gpt5_video_showcase/04_vault_drop_gold_recovery.mp4" type="video/mp4">
+                                    Your browser does not support embedded video.
+                                </video>
+                            </div>
+                            <div class="mixed-control-caption">
+                                <div class="video-meta">
+                                    <span>Missing skill</span>
+                                    <span>Primitive fallback</span>
+                                    <span>13 sec</span>
+                                </div>
+                                <h4>Filling the drop-gold skill gap</h4>
+                                <p>The vault guard demands the gold, but no drop-gold skill exists. GPT-5 uses primitive inputs to drop all gold, then returns to exploration.</p>
+                            </div>
                         </div>
                     </div>
                 </article>
