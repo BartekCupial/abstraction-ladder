@@ -17,11 +17,11 @@
         <div class="topbar-inner">
             <a class="brand" href="#">Abstraction Ladder</a>
             <div class="nav">
+                <a href="#rollouts">Rollouts</a>
                 <a href="#abstract">Abstract</a>
                 <a href="#motivation">Motivation</a>
                 <a href="#method">Method</a>
                 <a href="#experiments">Experiments</a>
-                <a href="#rollouts">Rollouts</a>
                 <a href="#citation">Citation</a>
             </div>
         </div>
@@ -53,12 +53,246 @@
                 <a class="button primary" href="#">Paper coming soon</a>
                 <a class="button" href="https://github.com/BartekCupial/codehack">CodeHack repository</a>
                 <a class="button" href="https://github.com/BartekCupial/codehack-baselines">Baselines repository</a>
-                <a class="button" href="#rollouts"><span aria-hidden="true">▶</span>&nbsp; Watch the agents play</a>
             </div>
         </div>
     </header>
 
     <main>
+        <section id="rollouts">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="kicker">Rollouts</p>
+                        <h2>Watch what the agents play.</h2>
+                    </div>
+                </div>
+
+                <article class="full-run-feature">
+                    <div class="full-run-copy">
+                        <div class="feature-heading">
+                            <span class="video-index static">01</span>
+                            <div>
+                                <h3>GPT-5 mixed-control trajectory in NetHack</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="video-shell full-run-video">
+                        <video controls muted playsinline preload="metadata"
+                            aria-label="Complete GPT-5 mixed-control NetHack run reaching dungeon depth 10">
+                            <source src="gpt5_video_showcase/nethack/full_run_depth_10.mp4" type="video/mp4">
+                            Your browser does not support embedded video.
+                        </video>
+                        <span class="full-run-badge">8 decisions / sec</span>
+                    </div>
+                </article>
+
+                <article class="task-gallery" data-task-gallery>
+                    <div class="task-gallery-heading">
+                        <div>
+                            <span class="video-index static">02</span>
+                            <!-- <p class="kicker">MiniHack tasks</p> -->
+                            <h3>MiniHack tasks</h3>
+                        </div>
+                        <!-- <p>Browse successful skill-control runs spanning navigation, combat, item use, and multi-stage quests.</p> -->
+                    </div>
+
+                    <div class="task-gallery-layout">
+                        <div class="task-stage">
+                            <div class="video-shell task-video-shell">
+                                <video class="task-video" id="minihack-player" controls muted playsinline preload="metadata"
+                                    aria-label="GPT-5 solves MiniHack Quest-Hard">
+                                    <source src="gpt5_video_showcase/03_minihack_quest_hard_solution.mp4" type="video/mp4">
+                                    Your browser does not support embedded video.
+                                </video>
+                            </div>
+
+                            <div class="task-active-copy" aria-live="polite">
+                                <div class="task-active-topline">
+                                    <div class="video-meta">
+                                        <span data-task-family>Quest</span>
+                                        <span data-task-decisions>19 decisions</span>
+                                        <span>Skill control</span>
+                                    </div>
+                                    <span class="task-count"><strong data-task-current>01</strong> / 07</span>
+                                </div>
+                                <h3 data-task-title>Quest-Hard solved</h3>
+                                <p data-task-description>GPT-5 explores, collects the required tools, crosses lava, defeats the monster, and reaches the stairs.</p>
+                            </div>
+
+                            <div class="gallery-controls" aria-label="MiniHack task navigation">
+                                <button class="gallery-arrow" type="button" data-gallery-prev aria-label="Show previous MiniHack task">
+                                    <span aria-hidden="true">←</span> Previous
+                                </button>
+                                <button class="gallery-arrow" type="button" data-gallery-next aria-label="Show next MiniHack task">
+                                    Next <span aria-hidden="true">→</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="task-rail" aria-label="Choose a MiniHack rollout">
+                            <button class="task-choice is-active" type="button" aria-controls="minihack-player" aria-pressed="true"
+                                data-src="gpt5_video_showcase/03_minihack_quest_hard_solution.mp4"
+                                data-title="Quest-Hard solved"
+                                data-family="Quest"
+                                data-decisions="19 decisions"
+                                data-description="GPT-5 explores, collects the required tools, crosses lava, defeats the monster, and reaches the stairs.">
+                                <img src="figures/minihack_quest_hard_v2.png" alt="" loading="lazy">
+                                <span class="task-choice-copy">
+                                    <strong>Quest-Hard</strong>
+                                    <span>19 decisions · multi-stage</span>
+                                </span>
+                                <span class="task-number">01</span>
+                            </button>
+
+                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                data-src="gpt5_video_showcase/minihack/quest_medium.mp4"
+                                data-title="Quest-Medium solved"
+                                data-family="Quest"
+                                data-decisions="18 decisions"
+                                data-description="GPT-5 prepares at a choke point, wins the fight, collects an item, freezes the lava, and descends.">
+                                <img src="figures/minihack_quest_medium.jpg" alt="" loading="lazy">
+                                <span class="task-choice-copy">
+                                    <strong>Quest-Medium</strong>
+                                    <span>18 decisions · combat + tools</span>
+                                </span>
+                                <span class="task-number">02</span>
+                            </button>
+
+                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                data-src="gpt5_video_showcase/minihack/quest_easy.mp4"
+                                data-title="Quest-Easy solved"
+                                data-family="Quest"
+                                data-decisions="5 decisions"
+                                data-description="GPT-5 picks up a tool, freezes the lava river, explores the far side, and reaches the stairs.">
+                                <img src="figures/minihack_quest_easy.jpg" alt="" loading="lazy">
+                                <span class="task-choice-copy">
+                                    <strong>Quest-Easy</strong>
+                                    <span>5 decisions · item use</span>
+                                </span>
+                                <span class="task-number">03</span>
+                            </button>
+
+                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                data-src="gpt5_video_showcase/minihack/corridor_r3.mp4"
+                                data-title="Corridor-R3 solved"
+                                data-family="Corridor"
+                                data-decisions="6 decisions"
+                                data-description="A short successful run through a three-room corridor task using semantic navigation skills.">
+                                <img src="figures/minihack_corridor_r3.jpg" alt="" loading="lazy">
+                                <span class="task-choice-copy">
+                                    <strong>Corridor-R3</strong>
+                                    <span>6 decisions · navigation</span>
+                                </span>
+                                <span class="task-number">04</span>
+                            </button>
+
+                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                data-src="gpt5_video_showcase/minihack/corridor_r5.mp4"
+                                data-title="Corridor-R5 solved"
+                                data-family="Corridor"
+                                data-decisions="7 decisions"
+                                data-description="GPT-5 traverses a five-room corridor task in seven high-level controller decisions.">
+                                <img src="figures/minihack_corridor_r5.jpg" alt="" loading="lazy">
+                                <span class="task-choice-copy">
+                                    <strong>Corridor-R5</strong>
+                                    <span>7 decisions · navigation</span>
+                                </span>
+                                <span class="task-number">05</span>
+                            </button>
+
+                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                data-src="gpt5_video_showcase/minihack/corridor_r10.mp4"
+                                data-title="Corridor-R10 solved"
+                                data-family="Corridor"
+                                data-decisions="8 decisions"
+                                data-description="A ten-room navigation task is compressed into eight skill-level decisions.">
+                                <img src="figures/minihack_corridor_r10.jpg" alt="" loading="lazy">
+                                <span class="task-choice-copy">
+                                    <strong>Corridor-R10</strong>
+                                    <span>8 decisions · long corridor</span>
+                                </span>
+                                <span class="task-number">06</span>
+                            </button>
+
+                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                data-src="gpt5_video_showcase/minihack/wod_hard.mp4"
+                                data-title="WoD-Hard solved"
+                                data-family="Combat"
+                                data-decisions="5 decisions"
+                                data-description="GPT-5 collects a wand, approaches the monster, uses ranged magic, and descends.">
+                                <img src="figures/minihack_wod_hard.jpg" alt="" loading="lazy">
+                                <span class="task-choice-copy">
+                                    <strong>WoD-Hard</strong>
+                                    <span>5 decisions · ranged combat</span>
+                                </span>
+                                <span class="task-number">07</span>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="mixed-control-feature">
+                    <div class="mixed-control-heading">
+                        <div class="feature-heading">
+                            <span class="video-index static">03</span>
+                            <div>
+                                <!-- <p class="kicker">Mixed control</p> -->
+                                <h3>When skills are insufficient, the agent moves down the abstraction ladder.</h3>
+                                <p>Two examples show primitive actions acting as an escape hatch: first after a skill fails, and then when the required behavior is missing from the skill library.</p>
+                            </div>
+                        </div>
+                        <div class="abstraction-sequence" aria-label="Skill, then primitive recovery, then skill">
+                            <span>Skill</span>
+                            <span aria-hidden="true">→</span>
+                            <span class="primitive-step">Primitives</span>
+                            <span aria-hidden="true">→</span>
+                            <span>Skill</span>
+                        </div>
+                    </div>
+
+                    <div class="mixed-control-videos">
+                        <div class="mixed-control-example">
+                            <div class="video-shell mixed-control-video">
+                                <video controls muted playsinline preload="metadata"
+                                    aria-label="GPT-5 recovers from a failed NetHack skill using primitive actions">
+                                    <source src="gpt5_video_showcase/01_nethack_mixed_control.mp4" type="video/mp4">
+                                    Your browser does not support embedded video.
+                                </video>
+                            </div>
+                            <div class="mixed-control-caption">
+                                <div class="video-meta">
+                                    <span>Failed skill</span>
+                                    <span>Primitive recovery</span>
+                                    <span>9 sec</span>
+                                </div>
+                                <h4>Recovering after ranged combat fails</h4>
+                                <p>Ranged combat runs out of ammunition. GPT-5 switches to primitive inputs, kills the gas spore, then returns to a high-level pickup skill.</p>
+                            </div>
+                        </div>
+
+                        <div class="mixed-control-example">
+                            <div class="video-shell mixed-control-video">
+                                <video controls muted playsinline preload="metadata"
+                                    aria-label="GPT-5 uses primitive actions to drop gold for a NetHack vault guard">
+                                    <source src="gpt5_video_showcase/04_vault_drop_gold_recovery.mp4" type="video/mp4">
+                                    Your browser does not support embedded video.
+                                </video>
+                            </div>
+                            <div class="mixed-control-caption">
+                                <div class="video-meta">
+                                    <span>Missing skill</span>
+                                    <span>Primitive fallback</span>
+                                    <span>13 sec</span>
+                                </div>
+                                <h4>Filling the drop-gold skill gap</h4>
+                                <p>The vault guard demands the gold, but no drop-gold skill exists. GPT-5 uses primitive inputs to drop all gold, then returns to exploration.</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
         <section id="abstract">
             <div class="container">
                 <div class="section-head">
@@ -263,258 +497,6 @@
                     <div class="figure-caption">
                         <h3>RL training curves for Qwen-3.5-4B</h3>
                         <p>Training curves compare action interfaces over the same PPO budget. Skill-based and mixed interfaces improve progression and dungeon depth faster than primitive-only control.</p>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <section id="rollouts">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="kicker">Rollouts</p>
-                        <h2>Watch what the abstractions look like in motion.</h2>
-                    </div>
-                </div>
-
-                <div class="story-text">
-                    <p>
-                        These examples show temporally extended code-based actions in familiar NetHack and MiniHack
-                        situations. They also illustrate why mixed control matters: high-level skills can accelerate
-                        repeated behaviors, but the controller still needs a path back to primitive actions when
-                        abstractions are insufficient.
-                    </p>
-                </div>
-
-                <article class="full-run-feature">
-                    <div class="full-run-copy">
-                        <div class="feature-heading">
-                            <span class="video-index static">01</span>
-                            <div>
-                                <p class="kicker">Full trajectory</p>
-                                <h3>A complete NetHack run to dungeon depth 10.</h3>
-                            </div>
-                        </div>
-                        <p>The full mixed-control episode shows how skills and primitive actions compose over a long horizon. It spans 956 controller decisions and reaches a final score of 5,645.</p>
-                        <div class="run-stats" aria-label="Full run statistics">
-                            <span><strong>956</strong> decisions</span>
-                            <span><strong>10</strong> max depth</span>
-                            <span><strong>5,645</strong> score</span>
-                            <span><strong>2:03</strong> runtime</span>
-                        </div>
-                    </div>
-                    <div class="video-shell full-run-video">
-                        <video controls muted playsinline preload="metadata"
-                            aria-label="Complete GPT-5 mixed-control NetHack run reaching dungeon depth 10">
-                            <source src="gpt5_video_showcase/nethack/full_run_depth_10.mp4" type="video/mp4">
-                            Your browser does not support embedded video.
-                        </video>
-                        <span class="full-run-badge">8 decisions / sec</span>
-                    </div>
-                </article>
-
-                <article class="task-gallery" data-task-gallery>
-                    <div class="task-gallery-heading">
-                        <div>
-                            <span class="video-index static">02</span>
-                            <p class="kicker">MiniHack task reel</p>
-                            <h3>Seven MiniHack tasks.</h3>
-                        </div>
-                        <p>Browse successful skill-control runs spanning navigation, combat, item use, and multi-stage quests.</p>
-                    </div>
-
-                    <div class="task-gallery-layout">
-                        <div class="task-stage">
-                            <div class="video-shell task-video-shell">
-                                <video class="task-video" id="minihack-player" controls muted playsinline preload="metadata"
-                                    aria-label="GPT-5 solves MiniHack Quest-Hard">
-                                    <source src="gpt5_video_showcase/03_minihack_quest_hard_solution.mp4" type="video/mp4">
-                                    Your browser does not support embedded video.
-                                </video>
-                            </div>
-
-                            <div class="task-active-copy" aria-live="polite">
-                                <div class="task-active-topline">
-                                    <div class="video-meta">
-                                        <span data-task-family>Quest</span>
-                                        <span data-task-decisions>19 decisions</span>
-                                        <span>Skill control</span>
-                                    </div>
-                                    <span class="task-count"><strong data-task-current>01</strong> / 07</span>
-                                </div>
-                                <h3 data-task-title>Quest-Hard solved</h3>
-                                <p data-task-description>GPT-5 explores, collects the required tools, crosses lava, defeats the monster, and reaches the stairs.</p>
-                            </div>
-
-                            <div class="gallery-controls" aria-label="MiniHack task navigation">
-                                <button class="gallery-arrow" type="button" data-gallery-prev aria-label="Show previous MiniHack task">
-                                    <span aria-hidden="true">←</span> Previous
-                                </button>
-                                <button class="gallery-arrow" type="button" data-gallery-next aria-label="Show next MiniHack task">
-                                    Next <span aria-hidden="true">→</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="task-rail" aria-label="Choose a MiniHack rollout">
-                            <button class="task-choice is-active" type="button" aria-controls="minihack-player" aria-pressed="true"
-                                data-src="gpt5_video_showcase/03_minihack_quest_hard_solution.mp4"
-                                data-title="Quest-Hard solved"
-                                data-family="Quest"
-                                data-decisions="19 decisions"
-                                data-description="GPT-5 explores, collects the required tools, crosses lava, defeats the monster, and reaches the stairs.">
-                                <img src="figures/minihack_quest_hard_v2.png" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Quest-Hard</strong>
-                                    <span>19 decisions · multi-stage</span>
-                                </span>
-                                <span class="task-number">01</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/quest_medium.mp4"
-                                data-title="Quest-Medium solved"
-                                data-family="Quest"
-                                data-decisions="18 decisions"
-                                data-description="GPT-5 prepares at a choke point, wins the fight, collects an item, freezes the lava, and descends.">
-                                <img src="figures/minihack_quest_medium.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Quest-Medium</strong>
-                                    <span>18 decisions · combat + tools</span>
-                                </span>
-                                <span class="task-number">02</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/quest_easy.mp4"
-                                data-title="Quest-Easy solved"
-                                data-family="Quest"
-                                data-decisions="5 decisions"
-                                data-description="GPT-5 picks up a tool, freezes the lava river, explores the far side, and reaches the stairs.">
-                                <img src="figures/minihack_quest_easy.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Quest-Easy</strong>
-                                    <span>5 decisions · item use</span>
-                                </span>
-                                <span class="task-number">03</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/corridor_r3.mp4"
-                                data-title="Corridor-R3 solved"
-                                data-family="Corridor"
-                                data-decisions="6 decisions"
-                                data-description="A short successful run through a three-room corridor task using semantic navigation skills.">
-                                <img src="figures/minihack_corridor_r3.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Corridor-R3</strong>
-                                    <span>6 decisions · navigation</span>
-                                </span>
-                                <span class="task-number">04</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/corridor_r5.mp4"
-                                data-title="Corridor-R5 solved"
-                                data-family="Corridor"
-                                data-decisions="7 decisions"
-                                data-description="GPT-5 traverses a five-room corridor task in seven high-level controller decisions.">
-                                <img src="figures/minihack_corridor_r5.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Corridor-R5</strong>
-                                    <span>7 decisions · navigation</span>
-                                </span>
-                                <span class="task-number">05</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/corridor_r10.mp4"
-                                data-title="Corridor-R10 solved"
-                                data-family="Corridor"
-                                data-decisions="8 decisions"
-                                data-description="A ten-room navigation task is compressed into eight skill-level decisions.">
-                                <img src="figures/minihack_corridor_r10.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Corridor-R10</strong>
-                                    <span>8 decisions · long corridor</span>
-                                </span>
-                                <span class="task-number">06</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/wod_hard.mp4"
-                                data-title="WoD-Hard solved"
-                                data-family="Combat"
-                                data-decisions="5 decisions"
-                                data-description="GPT-5 collects a wand, approaches the monster, uses ranged magic, and descends.">
-                                <img src="figures/minihack_wod_hard.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>WoD-Hard</strong>
-                                    <span>5 decisions · ranged combat</span>
-                                </span>
-                                <span class="task-number">07</span>
-                            </button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="mixed-control-feature">
-                    <div class="mixed-control-heading">
-                        <div class="feature-heading">
-                            <span class="video-index static">03</span>
-                            <div>
-                                <p class="kicker">Mixed control</p>
-                                <h3>When skills are insufficient, the agent moves down the abstraction ladder.</h3>
-                                <p>Two examples show primitive actions acting as an escape hatch: first after a skill fails, and then when the required behavior is missing from the skill library.</p>
-                            </div>
-                        </div>
-                        <div class="abstraction-sequence" aria-label="Skill, then primitive recovery, then skill">
-                            <span>Skill</span>
-                            <span aria-hidden="true">→</span>
-                            <span class="primitive-step">Primitives</span>
-                            <span aria-hidden="true">→</span>
-                            <span>Skill</span>
-                        </div>
-                    </div>
-
-                    <div class="mixed-control-videos">
-                        <div class="mixed-control-example">
-                            <div class="video-shell mixed-control-video">
-                                <video controls muted playsinline preload="metadata"
-                                    aria-label="GPT-5 recovers from a failed NetHack skill using primitive actions">
-                                    <source src="gpt5_video_showcase/01_nethack_mixed_control.mp4" type="video/mp4">
-                                    Your browser does not support embedded video.
-                                </video>
-                            </div>
-                            <div class="mixed-control-caption">
-                                <div class="video-meta">
-                                    <span>Failed skill</span>
-                                    <span>Primitive recovery</span>
-                                    <span>9 sec</span>
-                                </div>
-                                <h4>Recovering after ranged combat fails</h4>
-                                <p>Ranged combat runs out of ammunition. GPT-5 switches to primitive inputs, kills the gas spore, then returns to a high-level pickup skill.</p>
-                            </div>
-                        </div>
-
-                        <div class="mixed-control-example">
-                            <div class="video-shell mixed-control-video">
-                                <video controls muted playsinline preload="metadata"
-                                    aria-label="GPT-5 uses primitive actions to drop gold for a NetHack vault guard">
-                                    <source src="gpt5_video_showcase/04_vault_drop_gold_recovery.mp4" type="video/mp4">
-                                    Your browser does not support embedded video.
-                                </video>
-                            </div>
-                            <div class="mixed-control-caption">
-                                <div class="video-meta">
-                                    <span>Missing skill</span>
-                                    <span>Primitive fallback</span>
-                                    <span>13 sec</span>
-                                </div>
-                                <h4>Filling the drop-gold skill gap</h4>
-                                <p>The vault guard demands the gold, but no drop-gold skill exists. GPT-5 uses primitive inputs to drop all gold, then returns to exploration.</p>
-                            </div>
-                        </div>
                     </div>
                 </article>
             </div>

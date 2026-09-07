@@ -659,8 +659,7 @@ h3 {
 
 .full-run-feature {
     display: grid;
-    grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
-    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
     gap: 28px;
     margin-top: 32px;
     padding: 28px;
@@ -685,37 +684,13 @@ h3 {
 }
 
 .full-run-copy h3 {
-    max-width: 420px;
     font-size: 1.5rem;
 }
 
-.full-run-copy > p:last-of-type {
+.full-run-copy > p {
     margin: 12px 0 0;
     color: var(--muted);
     font-size: 0.96rem;
-}
-
-.run-stats {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 22px;
-}
-
-.run-stats span {
-    display: grid;
-    gap: 1px;
-    padding: 9px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 5px;
-    color: var(--quiet);
-    font-size: 0.72rem;
-    text-transform: uppercase;
-}
-
-.run-stats strong {
-    color: var(--text);
-    font-size: 1rem;
 }
 
 .full-run-video {
@@ -1006,10 +981,6 @@ footer {
 
     .task-choice:hover {
         transform: translateY(-2px);
-    }
-
-    .full-run-feature {
-        grid-template-columns: 1fr;
     }
 
     .mixed-control-heading {
