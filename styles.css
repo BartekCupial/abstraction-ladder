@@ -818,6 +818,7 @@ h3 {
 
 .paper-figure img {
     width: 100%;
+    height: auto;
     padding: 18px;
     background: #f7fafc;
     border-radius: 0;
@@ -870,6 +871,7 @@ h3 {
 
 .figure-frame img {
     width: 100%;
+    height: auto;
     border-radius: 4px;
 }
 
