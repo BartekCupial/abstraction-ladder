@@ -1,0 +1,179 @@
+{
+  "retrieved": "2026-10-05",
+  "collection": "https://nethackwiki.com/wiki/Category:Main_Page_rotation",
+  "sources": [
+    {
+      "id": "wiki-1",
+      "name": "Dungeon level 2",
+      "group": "Gameplay screenshots",
+      "file": "ttymap1.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap1",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap1",
+      "revision": 68892,
+      "note": "Gameplay screenshot from the wiki’s home page rotation."
+    },
+    {
+      "id": "wiki-2",
+      "name": "Gnomish Mines · Surrounded",
+      "group": "Gameplay screenshots",
+      "file": "ttymap2.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap2",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap2",
+      "revision": 68894,
+      "note": "Gameplay screenshot from the wiki’s home page rotation."
+    },
+    {
+      "id": "wiki-3",
+      "name": "Minetown · Temple",
+      "group": "Gameplay screenshots",
+      "file": "ttymap3.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap3",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap3",
+      "revision": 68896,
+      "note": "The source does not identify which of the three @ characters is the player."
+    },
+    {
+      "id": "wiki-4",
+      "name": "Dungeon level 2 · Kops",
+      "group": "Gameplay screenshots",
+      "file": "ttymap4.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap4",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap4",
+      "revision": 156923,
+      "note": "Gameplay screenshot from the wiki’s home page rotation."
+    },
+    {
+      "id": "wiki-5",
+      "name": "Minetown · Altar",
+      "group": "Gameplay screenshots",
+      "file": "ttymap5.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap5",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap5",
+      "revision": 68900,
+      "note": "Gameplay screenshot from the wiki’s home page rotation."
+    },
+    {
+      "id": "wiki-6",
+      "name": "Asmodeus’s lair",
+      "group": "Gameplay screenshots",
+      "file": "ttymap6.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap6",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap6",
+      "revision": 68902,
+      "note": "The source marks the player with h in this screenshot."
+    },
+    {
+      "id": "wiki-7",
+      "name": "Dungeon level 2 · Shop",
+      "group": "Gameplay screenshots",
+      "file": "ttymap7.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap7",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap7",
+      "revision": 68904,
+      "note": "Gameplay screenshot from the wiki’s home page rotation."
+    },
+    {
+      "id": "wiki-8",
+      "name": "Gnomish Mines · Water nymph",
+      "group": "Gameplay screenshots",
+      "file": "ttymap8.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap8",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap8",
+      "revision": 68925,
+      "note": "Gameplay screenshot from the wiki’s home page rotation."
+    },
+    {
+      "id": "wiki-9",
+      "name": "Minetown · Picking up items",
+      "group": "Gameplay screenshots",
+      "file": "ttymap9.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap9",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap9",
+      "revision": 90224,
+      "note": "The pickup menu covers part of the level in this screenshot.",
+      "overlays": [
+        {
+          "x": 48,
+          "y": 0,
+          "width": 31,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "id": "wiki-10",
+      "name": "Sokoban",
+      "group": "Gameplay screenshots",
+      "file": "ttymap10.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap10",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap10",
+      "revision": 92705,
+      "note": "The player is not marked in this screenshot."
+    },
+    {
+      "id": "wiki-11",
+      "name": "Water maze",
+      "group": "Gameplay screenshots",
+      "file": "ttymap11.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap11",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap11",
+      "revision": 90226,
+      "note": "The player is not marked in this screenshot."
+    },
+    {
+      "id": "wiki-12",
+      "name": "Gnomish Mines · Magic missile",
+      "group": "Gameplay screenshots",
+      "file": "ttymap12.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap12",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap12",
+      "revision": 90227,
+      "note": "Gameplay screenshot from the wiki’s home page rotation."
+    },
+    {
+      "id": "wiki-13",
+      "name": "Dungeon level 15 · Wishing",
+      "group": "Gameplay screenshots",
+      "file": "ttymap13.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap13",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap13",
+      "revision": 90228,
+      "note": "Gameplay screenshot from the wiki’s home page rotation."
+    },
+    {
+      "id": "wiki-14",
+      "name": "The Castle",
+      "group": "Gameplay screenshots",
+      "file": "ttymap14.html",
+      "type": "screenshot",
+      "title": "Template:Random ttymap/ttymap14",
+      "url": "https://nethackwiki.com/wiki/Template:Random_ttymap/ttymap14",
+      "revision": 125371,
+      "note": "Gameplay screenshot from the wiki’s home page rotation."
+    },
+    {
+      "id": "medusa-2",
+      "name": "Medusa’s island · Layout 2",
+      "group": "Medusa’s island layouts",
+      "file": "medusa-2.html",
+      "type": "layout",
+      "title": "Medusa’s Island · second version",
+      "url": "https://nethackwiki.com/wiki/Medusa%27s_Island#Second_version",
+      "revision": 209604,
+      "note": "Level layout from the wiki, with no player position."
+    }
+  ]
+}

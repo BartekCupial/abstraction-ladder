@@ -1,0 +1,49 @@
+{
+  "retrieved": "2026-10-05",
+  "sources": [
+    {
+      "id": "medusa-encounter",
+      "name": "Medusa’s Island · Facing Medusa",
+      "group": "Gameplay screenshots",
+      "file": "medusa-encounter.html",
+      "type": "screenshot",
+      "title": "BotHack Samurai ascension recording · 2h 29m 32.430s",
+      "url": "https://github.com/krajj7/BotHack/blob/aa6a93c8993d92fa0a4c7a02ab529f241639c110/ttyrec/samurai-bot-asc.ttyrec.xz",
+      "revisionUrl": "https://github.com/krajj7/BotHack/blob/aa6a93c8993d92fa0a4c7a02ab529f241639c110/ttyrec/samurai-bot-asc.ttyrec.xz",
+      "note": "Recorded encounter with water revealed from NetHack Wiki’s second Medusa layout. This is BotHack gameplay, not an episode from our experiments.",
+      "terrainReveal": {
+        "layout": "medusa-2",
+        "offset": [2, 1],
+        "glyphs": "}",
+        "note": "Water added from the matching wiki layout. Recorded cells take precedence."
+      },
+      "capture": {
+        "frame": 1020257,
+        "startFrame": 1020250,
+        "startOffset": 133061345,
+        "endOffset": 133062830,
+        "elapsed": 8972.430069,
+        "timestamp": 1433585080.074989,
+        "terminal": [
+          80,
+          24
+        ],
+        "cursor": [
+          70,
+          12
+        ],
+        "excerpt": "medusa-encounter.ttyrec",
+        "excerptSha256": "7c828441c3ec574ff37de3c315c461bd4bae172b0662c45143c269a77b0b9f0a",
+        "recordingSha256": "a419878487f89066592ae6ae23de9ba1e299fb990224ceafbc0b4e8e1d43ae2f",
+        "player": [
+          70,
+          11
+        ],
+        "medusa": [
+          69,
+          11
+        ]
+      }
+    }
+  ]
+}

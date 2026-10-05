@@ -3,584 +3,429 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CodeHack gives language agents reusable code skills. In NetHack, skills yield 2.9× the zero-shot progression, 86% lower inference cost, and faster RL learning.">
+    <meta name="description" content="Why reusable code skills matter for LLM agents, where their assumptions fall short, and what happens when agents can act beyond their tools.">
+    <meta name="theme-color" content="#ffffff">
+    <meta property="og:title" content="Up and Down the Abstraction Ladder — Code-Based Skills for Language Agents">
+    <meta property="og:description" content="Why reusable skills matter for LLM agents, what NetHack teaches us, and where to go next.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://bartekcupial.github.io/abstraction-ladder/">
     <link rel="canonical" href="https://bartekcupial.github.io/abstraction-ladder/">
-    <title>Up and Down the Abstraction Ladder: Code-Based Skills for Language Agents</title>
+    <title>Up and Down the Abstraction Ladder — Code-Based Skills for Language Agents</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="map-data.js" defer></script>
+    <script src="map-renderer.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to the post</a>
     <nav class="topbar" aria-label="Primary navigation">
         <div class="topbar-inner">
-            <a class="brand" href="#">Abstraction Ladder</a>
+            <a class="brand" href="#top"><svg class="brand-mark" viewBox="0 0 24 28" width="24" height="28" aria-hidden="true"><path d="M5 2v24M19 2v24M5 7h14M5 14h14M5 21h14" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Abstraction Ladder</a>
             <div class="nav">
-                <a href="#rollouts">Rollouts</a>
-                <a href="#abstract">Abstract</a>
                 <a href="#motivation">Motivation</a>
-                <a href="#method">Method</a>
-                <a href="#experiments">Experiments</a>
-                <a href="#citation">Citation</a>
+                <a href="#nethack">Why NetHack?</a>
+                <a href="#study">What we study</a>
+                <a href="#findings">What we learned</a>
+                <a href="#future">What comes next</a>
+                <a href="https://arxiv.org/abs/2609.31076">Paper <span aria-hidden="true">↗︎</span></a>
             </div>
         </div>
+        <div class="reading-progress" aria-hidden="true"></div>
     </nav>
 
-    <header class="hero">
+    <header class="hero" id="top">
         <div class="hero-inner">
-            <p class="eyebrow">Code-based skills for long-horizon language agents</p>
-            <div class="title-lockup">
-                <h1>Up and Down the Abstraction Ladder</h1>
-            </div>
-            <p class="subtitle">
-                We study the benefits and tradeoffs of using low-level primitives, higher-level
-                code skills, or both for long-horizon language agents.
-            </p>
-
+            <h1>
+                <span class="hero-title">Up and Down the<br>Abstraction Ladder</span>
+                <span class="eyebrow">Code-Based Skills for Language Agents</span>
+            </h1>
             <p class="authors">
-                <span class="author-item" tabindex="0">Bartłomiej Cupiał<sup>1,6</sup><span class="author-affiliations" role="tooltip"><sup>1</sup> University of Warsaw<br><sup>6</sup> AKCES NCBR</span></span>,
-                <span class="author-item" tabindex="0">Jens Tuyls<sup>2</sup><span class="author-affiliations" role="tooltip"><sup>2</sup> Princeton University</span></span>,
-                <span class="author-item" tabindex="0">Maciej Wołczyk<sup>3</sup><span class="author-affiliations" role="tooltip"><sup>3</sup> IDEAS NCBR</span></span>,
-                <span class="author-item" tabindex="0">Davide Paglieri<sup>4</sup><span class="author-affiliations" role="tooltip"><sup>4</sup> University College London</span></span>,
-                <span class="author-item" tabindex="0">Martin Klissarov<sup>5,7</sup><span class="author-affiliations" role="tooltip"><sup>5</sup> McGill University<br><sup>7</sup> Mila</span></span>,
-                <span class="author-item" tabindex="0">Benjamin Eysenbach<sup>2</sup><span class="author-affiliations" role="tooltip"><sup>2</sup> Princeton University</span></span>,
-                <span class="author-item" tabindex="0">Piotr Miłoś<sup>1,8,9</sup><span class="author-affiliations" role="tooltip"><sup>1</sup> University of Warsaw<br><sup>8</sup> Mistral AI<br><sup>9</sup> Institute of Mathematics, Polish Academy of Sciences</span></span>,
-                <span class="author-item" tabindex="0">Karthik R. Narasimhan<sup>2</sup><span class="author-affiliations" role="tooltip"><sup>2</sup> Princeton University</span></span>
+                Bartłomiej Cupiał<sup>1,6</sup>, Jens Tuyls<sup>2</sup>, Maciej Wołczyk<sup>3</sup>,
+                Davide Paglieri<sup>4</sup>, Martin Klissarov<sup>5,7</sup>, Benjamin Eysenbach<sup>2</sup>,
+                Piotr Miłoś<sup>1,8,9</sup>, Karthik R. Narasimhan<sup>2</sup>
             </p>
-
-            <div class="links" aria-label="Project links">
-                <a class="button primary" href="https://arxiv.org/abs/2609.31076">Read the paper</a>
-                <a class="button" href="https://github.com/BartekCupial/codehack">CodeHack repository</a>
-                <a class="button" href="https://github.com/BartekCupial/codehack-baselines">Baselines repository</a>
+            <details class="affiliations">
+                <summary>Author affiliations</summary>
+                <ol class="affiliation-list"><li>University of Warsaw</li><li>Princeton University</li><li>IDEAS NCBR</li><li>University College London</li><li>McGill University</li><li>AKCES NCBR</li><li>Mila</li><li>Mistral AI</li><li>Institute of Mathematics, Polish Academy of Sciences</li></ol>
+            </details>
+            <div class="links" aria-label="Project resources">
+                <a class="button primary" href="https://arxiv.org/abs/2609.31076">Read the paper <span aria-hidden="true">↗︎</span></a>
+                <a class="button" href="https://github.com/BartekCupial/codehack">CodeHack</a>
+                <a class="button" href="https://github.com/BartekCupial/codehack-baselines">Training and evaluation code</a>
             </div>
         </div>
     </header>
 
-    <main>
-        <section id="rollouts">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="kicker">Rollouts</p>
-                        <h2>Watch what the agents play.</h2>
-                    </div>
+    <main id="main-content">
+        <article class="essay" aria-label="Research blog post">
+            <section class="essay-section" id="motivation">
+                <div class="prose">
+                    <h2 class="section-label">Motivation</h2>
+                    <p>Developers write code to automate repetitive tasks such as renaming files, processing data, and running experiments. A correct program can carry out these tasks quickly and consistently. We can inspect its implementation, test its behavior, and reuse it across tasks.</p>
+                    <p>LLM agents can do the same. They can write programs or use existing tools to automate parts of a task. The code handles the repeated steps, reducing the number of model calls and the opportunities for mistakes in those steps. The model decides when to use the tool and what to do with its result.</p>
+                    <p>Code can also automate behavior in sequential decision making problems, such as playing games or controlling robots. These problems are also studied in reinforcement learning, where agents learn through interaction. <a href="https://arxiv.org/abs/2209.07753">Code as Policies</a> shows how LLMs can generate programs that control robots by choosing actions from observations. We call these programs <strong>code skills</strong>. They are tools that let an agent delegate behavior over multiple steps.</p>
+                    <p>That delegation creates an abstraction. A single request stands for a sequence of decisions made inside the skill. Those decisions can be useful across many situations, yet unsuitable for an unexpected one. A library may also leave out a behavior the agent needs entirely.</p>
+                    <p>Other work explores how to build and reuse these capabilities. <a href="https://arxiv.org/abs/2305.16291">Voyager</a> develops a library of code skills in Minecraft. Skills can also be learned with neural networks. <a href="https://arxiv.org/abs/2204.01691">SayCan</a> uses a language model and estimates of success to choose among pretrained robot skills. In <a href="https://arxiv.org/abs/2412.08542">MaestroMotif</a>, generated code combines learned behaviors.</p>
+                    <p>Our study focuses on what happens once skills are available. How much do they help an agent act and learn, and when is it worth moving back down to individual actions? We keep the supplied skill library fixed to examine these questions separately from skill creation. We study them in NetHack, where familiar procedures must coexist with situations they cannot fully anticipate.</p>
                 </div>
+            </section>
 
-                <article class="full-run-feature">
-                    <div class="full-run-copy">
-                        <div class="feature-heading">
-                            <span class="video-index static">01</span>
-                            <div>
-                                <h3>GPT-5 mixed-control trajectory in NetHack</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="video-shell full-run-video">
-                        <video controls muted playsinline preload="metadata"
-                            aria-label="Complete GPT-5 mixed-control NetHack run reaching dungeon depth 10">
-                            <source src="gpt5_video_showcase/nethack/full_run_depth_10.mp4" type="video/mp4">
-                            Your browser does not support embedded video.
-                        </video>
-                        <span class="full-run-badge">8 decisions / sec</span>
-                    </div>
-                </article>
-
-                <article class="task-gallery" data-task-gallery>
-                    <div class="task-gallery-heading">
-                        <div>
-                            <span class="video-index static">02</span>
-                            <!-- <p class="kicker">MiniHack tasks</p> -->
-                            <h3>MiniHack tasks</h3>
-                        </div>
-                        <!-- <p>Browse successful skill-control runs spanning navigation, combat, item use, and multi-stage quests.</p> -->
-                    </div>
-
-                    <div class="task-gallery-layout">
-                        <div class="task-stage">
-                            <div class="video-shell task-video-shell">
-                                <video class="task-video" id="minihack-player" controls muted playsinline preload="metadata"
-                                    aria-label="GPT-5 solves MiniHack Quest-Hard">
-                                    <source src="gpt5_video_showcase/03_minihack_quest_hard_solution.mp4" type="video/mp4">
-                                    Your browser does not support embedded video.
-                                </video>
-                            </div>
-
-                            <div class="task-active-copy" aria-live="polite">
-                                <div class="task-active-topline">
-                                    <div class="video-meta">
-                                        <span data-task-family>Quest</span>
-                                        <span data-task-decisions>19 decisions</span>
-                                        <span>Skill control</span>
-                                    </div>
-                                    <span class="task-count"><strong data-task-current>01</strong> / 07</span>
-                                </div>
-                                <h3 data-task-title>Quest-Hard solved</h3>
-                                <p data-task-description>GPT-5 explores, collects the required tools, crosses lava, defeats the monster, and reaches the stairs.</p>
-                            </div>
-
-                            <div class="gallery-controls" aria-label="MiniHack task navigation">
-                                <button class="gallery-arrow" type="button" data-gallery-prev aria-label="Show previous MiniHack task">
-                                    <span aria-hidden="true">←</span> Previous
-                                </button>
-                                <button class="gallery-arrow" type="button" data-gallery-next aria-label="Show next MiniHack task">
-                                    Next <span aria-hidden="true">→</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="task-rail" aria-label="Choose a MiniHack rollout">
-                            <button class="task-choice is-active" type="button" aria-controls="minihack-player" aria-pressed="true"
-                                data-src="gpt5_video_showcase/03_minihack_quest_hard_solution.mp4"
-                                data-title="Quest-Hard solved"
-                                data-family="Quest"
-                                data-decisions="19 decisions"
-                                data-description="GPT-5 explores, collects the required tools, crosses lava, defeats the monster, and reaches the stairs.">
-                                <img src="figures/minihack_quest_hard_v2.png" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Quest-Hard</strong>
-                                    <span>19 decisions · multi-stage</span>
-                                </span>
-                                <span class="task-number">01</span>
+            <section class="essay-section" id="nethack">
+                <div class="prose">
+                    <h2 class="section-label">Why NetHack?</h2>
+                    <p><a href="https://nethackwiki.com/wiki/NetHack">NetHack</a> has long been a challenge for AI agents. The player must survive an expedition through a dungeon, exploring unfamiliar rooms, encountering monsters, and collecting equipment. Winning requires retrieving the <a href="https://nethackwiki.com/wiki/Amulet_of_Yendor">Amulet of Yendor</a> from <a href="https://nethackwiki.com/wiki/Moloch%27s_Sanctum">Moloch’s Sanctum</a> and bringing it back through the dungeon. The player must then survive the <a href="https://nethackwiki.com/wiki/Elemental_Planes">Elemental Planes</a>, a final series of dangerous levels, and offer the amulet at their god’s altar on the <a href="https://nethackwiki.com/wiki/Astral_Plane">Astral Plane</a>. Death ends the run.</p>
+                    <p>The figure below shows the variety of levels a player can encounter in NetHack’s dungeon.</p>
+                </div>
+                <figure class="wide-figure dungeon-map" data-map-viewer data-render="graphical" hidden>
+                    <div class="map-toolbar">
+                        <div class="map-heading"><h3>Example NetHack levels</h3></div>
+                        <div class="map-actions">
+                            <button class="map-playback" type="button" aria-label="Pause automatic level changes" title="Pause automatic level changes" aria-controls="dungeon-map-surface" data-map-playback>
+                                <svg class="map-pause-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+                                <svg class="map-play-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="m7 4 13 8-13 8z"/></svg>
                             </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/quest_medium.mp4"
-                                data-title="Quest-Medium solved"
-                                data-family="Quest"
-                                data-decisions="18 decisions"
-                                data-description="GPT-5 prepares at a choke point, wins the fight, collects an item, freezes the lava, and descends.">
-                                <img src="figures/minihack_quest_medium.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Quest-Medium</strong>
-                                    <span>18 decisions · combat + tools</span>
-                                </span>
-                                <span class="task-number">02</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/quest_easy.mp4"
-                                data-title="Quest-Easy solved"
-                                data-family="Quest"
-                                data-decisions="5 decisions"
-                                data-description="GPT-5 picks up a tool, freezes the lava river, explores the far side, and reaches the stairs.">
-                                <img src="figures/minihack_quest_easy.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Quest-Easy</strong>
-                                    <span>5 decisions · item use</span>
-                                </span>
-                                <span class="task-number">03</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/corridor_r3.mp4"
-                                data-title="Corridor-R3 solved"
-                                data-family="Corridor"
-                                data-decisions="6 decisions"
-                                data-description="A short successful run through a three-room corridor task using semantic navigation skills.">
-                                <img src="figures/minihack_corridor_r3.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Corridor-R3</strong>
-                                    <span>6 decisions · navigation</span>
-                                </span>
-                                <span class="task-number">04</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/corridor_r5.mp4"
-                                data-title="Corridor-R5 solved"
-                                data-family="Corridor"
-                                data-decisions="7 decisions"
-                                data-description="GPT-5 traverses a five-room corridor task in seven high-level controller decisions.">
-                                <img src="figures/minihack_corridor_r5.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Corridor-R5</strong>
-                                    <span>7 decisions · navigation</span>
-                                </span>
-                                <span class="task-number">05</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/corridor_r10.mp4"
-                                data-title="Corridor-R10 solved"
-                                data-family="Corridor"
-                                data-decisions="8 decisions"
-                                data-description="A ten-room navigation task is compressed into eight skill-level decisions.">
-                                <img src="figures/minihack_corridor_r10.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>Corridor-R10</strong>
-                                    <span>8 decisions · long corridor</span>
-                                </span>
-                                <span class="task-number">06</span>
-                            </button>
-
-                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
-                                data-src="gpt5_video_showcase/minihack/wod_hard.mp4"
-                                data-title="WoD-Hard solved"
-                                data-family="Combat"
-                                data-decisions="5 decisions"
-                                data-description="GPT-5 collects a wand, approaches the monster, uses ranged magic, and descends.">
-                                <img src="figures/minihack_wod_hard.jpg" alt="" loading="lazy">
-                                <span class="task-choice-copy">
-                                    <strong>WoD-Hard</strong>
-                                    <span>5 decisions · ranged combat</span>
-                                </span>
-                                <span class="task-number">07</span>
+                            <button class="map-expand" type="button" aria-label="Enlarge level view" title="Enlarge level view" aria-haspopup="dialog" aria-controls="dungeon-map-dialog" data-map-expand>
+                                <svg class="map-expand-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5M4 4l6 6m10-6-6 6M4 20l6-6m10 6-6-6"/></svg>
+                                <svg class="map-close-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg>
                             </button>
                         </div>
                     </div>
-                </article>
-
-                <article class="mixed-control-feature">
-                    <div class="mixed-control-heading">
-                        <div class="feature-heading">
-                            <span class="video-index static">03</span>
-                            <div>
-                                <!-- <p class="kicker">Mixed control</p> -->
-                                <h3>When skills are insufficient, the agent moves down the abstraction ladder.</h3>
-                                <p>Two examples show primitive actions acting as an escape hatch: first after a skill fails, and then when the required behavior is missing from the skill library.</p>
-                            </div>
-                        </div>
-                        <div class="abstraction-sequence" aria-label="Skill, then primitive recovery, then skill">
-                            <span>Skill</span>
-                            <span aria-hidden="true">→</span>
-                            <span class="primitive-step">Primitives</span>
-                            <span aria-hidden="true">→</span>
-                            <span>Skill</span>
-                        </div>
+                    <div class="map-scene-bar">
+                        <button class="map-scene-step" type="button" data-map-previous aria-label="Previous example level" aria-controls="dungeon-map-surface">←</button>
+                        <label class="sr-only" for="map-scene-select">Example level</label>
+                        <select id="map-scene-select" data-map-select aria-controls="dungeon-map-surface"></select>
+                        <button class="map-scene-step" type="button" data-map-next aria-label="Next example level" aria-controls="dungeon-map-surface">→</button>
+                        <span class="map-scene-count" data-map-count aria-hidden="true"></span>
                     </div>
+                    <div class="map-progress" aria-hidden="true"><span data-map-progress></span></div>
+                    <div class="map-terminal-text map-message" role="group" aria-label="Last game message" data-map-message></div>
+                    <div class="map-surface" id="dungeon-map-surface" tabindex="0" role="button" aria-label="Enlarge NetHack level view" aria-haspopup="dialog" aria-controls="dungeon-map-dialog" aria-describedby="map-help" data-map-surface></div>
+                    <div class="map-terminal-text map-player-stats" role="group" aria-label="Player statistics" data-map-stats></div>
+                    <p class="sr-only" id="map-help">Scroll sideways to explore the level.</p>
+                    <p class="sr-only" data-map-status aria-live="off"></p>
+                    <figcaption><a data-map-source href="https://github.com/krajj7/BotHack/blob/aa6a93c8993d92fa0a4c7a02ab529f241639c110/ttyrec/samurai-bot-asc.ttyrec.xz">Medusa’s Island · Facing Medusa</a>. The examples include all 14 screenshots in NetHack Wiki’s <a href="https://nethackwiki.com/wiki/Category:Main_Page_rotation">home page rotation</a> and a Medusa encounter from <a href="https://github.com/krajj7/BotHack/blob/aa6a93c8993d92fa0a4c7a02ab529f241639c110/ttyrec/samurai-bot-asc.ttyrec.xz">BotHack’s recorded run</a>, with water added from the wiki’s <a href="https://nethackwiki.com/wiki/Medusa%27s_Island#Second_version">second Medusa layout</a>.</figcaption>
+                </figure>
+                <dialog class="map-dialog" id="dungeon-map-dialog" aria-label="Example NetHack levels, enlarged view" data-map-dialog></dialog>
+                <div class="prose">
+                    <p>NetHack’s dungeon is randomly generated, and a successful run can involve <a href="https://nethackwiki.com/wiki/Speed_ascension#How_fast_is_fast?">tens of thousands of turns</a> and several days of play. The dungeon is especially dangerous in the early game, when the character is weak and has limited resources. NetHack is also incredibly complex, with hundreds of different monsters and items, a vast set of rules, and unexpected interactions between creatures, objects, and the environment.</p>
+                    <p id="medusa-level">To illustrate the complexity of NetHack, let’s take a closer look at <a href="https://nethackwiki.com/wiki/Medusa%27s_Island#Strategy">Medusa’s Island</a>. The player needs to reach the stairs on an island guarded by Medusa, whose gaze can turn them to stone. Crossing the surrounding water might mean levitating over it, freezing a path with a wand of cold, or filling gaps with boulders. With a pickaxe, the player can instead descend through the floor and return by the stairs from below. But digging beside water risks drowning, and the return route leads straight into Medusa’s room.</p>
+                    <p>The player also needs a plan for <a href="https://nethackwiki.com/wiki/Medusa#Strategy">dealing with Medusa herself</a>. A shield of reflection can turn her to stone with her own gaze, but this will not work if the player is invisible to her. Wearing a blindfold offers another approach, protecting the player from her gaze while they fight without sight. Without a way to handle the gaze, the player may need to retreat and return with better equipment. The level is a puzzle whose solution depends on the items, abilities, and routes available in that run.</p>
+                    <p>A skill could be written to beat Medusa, but it would need to choose among these plans and handle their many edge cases as the character’s role, inventory, and level layout change. Programming and testing all these combinations would take substantial work. And this is one encounter in a dungeon with <a href="https://nethackwiki.com/wiki/Mazes_of_Menace">more than 50 levels</a>.</p>
+                    <p>This motivates a division of work. Skills can automate familiar, repetitive procedures and return control to the LLM when they reach the limits of what they can handle. The agent can then reconsider the plan, combine skills that still apply, or use individual actions before delegating again. NetHack lets us study how much can be gained from routine automation while keeping this flexibility to deal with situations the skill code does not cover.</p>
+                </div>
+            </section>
 
-                    <div class="mixed-control-videos">
-                        <div class="mixed-control-example">
-                            <div class="video-shell mixed-control-video">
-                                <video controls muted playsinline preload="metadata"
-                                    aria-label="GPT-5 recovers from a failed NetHack skill using primitive actions">
-                                    <source src="gpt5_video_showcase/01_nethack_mixed_control.mp4" type="video/mp4">
-                                    Your browser does not support embedded video.
-                                </video>
-                            </div>
-                            <div class="mixed-control-caption">
-                                <div class="video-meta">
-                                    <span>Failed skill</span>
-                                    <span>Primitive recovery</span>
-                                    <span>9 sec</span>
-                                </div>
-                                <h4>Recovering after ranged combat fails</h4>
-                                <p>The ranged-combat skill returns without acting. GPT-5 uses primitive inputs to throw a javelin, kills the gas spore, then returns to a pickup skill.</p>
-                            </div>
+            <section class="essay-section" id="study">
+                <div class="prose">
+                    <h2 class="section-label">What we study</h2>
+                    <p>We study how the actions available to a language agent affect its performance, inference cost, and learning. To make this comparison possible, we built <a href="https://github.com/BartekCupial/codehack">CodeHack</a>, an open-source library of reusable Python skills and a shared runtime for NetHack and MiniHack.</p>
+                    <p>CodeHack provides 78 skills for recurring tasks such as exploration, navigation, combat, and equipment management. A skill reads the game state and issues commands, adapting to new observations as it runs. When it completes, fails, or is interrupted, control returns to the model. We use this library to compare three ways of acting.</p>
+                </div>
+                <figure class="wide-figure study-interfaces">
+                    <div class="interface-options">
+                        <div class="interface-option">
+                            <h3>Primitives</h3>
+                            <p class="interface-choice">Choose a game command</p>
+                            <p>The model handles each step, from moving through a corridor to responding to a game prompt.</p>
+                            <p class="interface-examples">Move · Search · Kick</p>
                         </div>
-
-                        <div class="mixed-control-example">
-                            <div class="video-shell mixed-control-video">
-                                <video controls muted playsinline preload="metadata"
-                                    aria-label="GPT-5 uses primitive actions to drop gold for a NetHack vault guard">
-                                    <source src="gpt5_video_showcase/04_vault_drop_gold_recovery.mp4" type="video/mp4">
-                                    Your browser does not support embedded video.
-                                </video>
-                            </div>
-                            <div class="mixed-control-caption">
-                                <div class="video-meta">
-                                    <span>Missing skill</span>
-                                    <span>Primitive fallback</span>
-                                    <span>13 sec</span>
-                                </div>
-                                <h4>Filling the drop-gold skill gap</h4>
-                                <p>The vault guard demands the gold, but no drop-gold skill exists. GPT-5 uses primitive inputs to drop all gold, then returns to exploration.</p>
-                            </div>
+                        <div class="interface-option">
+                            <h3>Skills</h3>
+                            <p class="interface-choice">Delegate a procedure</p>
+                            <p>The model selects a skill. Its code handles the intervening actions until control returns.</p>
+                            <p class="interface-examples">Explore · Fight melee · Open doors</p>
+                        </div>
+                        <div class="interface-option">
+                            <h3>Mixed</h3>
+                            <p class="interface-choice">Choose either level</p>
+                            <p>The model can use a skill, act through individual commands, and return to skills when useful.</p>
+                            <p class="interface-examples">Skills + primitives</p>
                         </div>
                     </div>
-                </article>
-            </div>
-        </section>
-
-        <section id="abstract">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="kicker">Abstract</p>
-                        <h2>Code skills improve performance, reduce inference cost, and accelerate learning.</h2>
-                    </div>
+                    <p class="interface-shared">Shared across all three · observations, map memory, inventory tracking, and execution runtime</p>
+                    <figcaption>Within each task, we keep the game settings, observation format, and prompt template fixed. The available actions and their descriptions change. The skill code stays fixed, including during training.</figcaption>
+                </figure>
+                <div class="prose">
+                    <p>We examine this choice in three settings.</p>
+                    <dl class="study-tests">
+                        <div><dt>Before training</dt><dd>We compare 14 models on NetHack and test GPT-5 on seven MiniHack tasks that isolate navigation, exploration, combat, and item use.</dd></div>
+                        <div><dt>With missing skills</dt><dd>We remove skill families and test whether access to primitives helps Gemma-4-31B cope with the gaps.</dd></div>
+                        <div><dt>During learning</dt><dd>We train Llama-3.1-8B-Instruct and Qwen-3.5-4B with reinforcement learning, and test whether learning from demonstrations first provides a better starting point.</dd></div>
+                    </dl>
+                    <p>Together, these experiments measure the benefits of a supplied library, the cost of retaining finer control, and how the action interface shapes learning. We release the <a href="https://github.com/BartekCupial/codehack-baselines">training and evaluation code</a> alongside CodeHack.</p>
                 </div>
+            </section>
 
-                <div class="abstract-layout">
-                    <div class="story-text">
-                        <p>
-                            <strong>Language agents struggle to act and learn in environments that require long sequences of low-level actions.</strong> Code-based abstractions can make these agents more productive by letting them invoke reusable skills instead of repeatedly selecting individual actions. The code handles recurring local decisions, while the language model decides which skills to use and how to combine them. Yet abstractions are leaky, and situations beyond a skill's capabilities may require a return to primitive actions.
-                        </p>
-                        <p>
-                            Motivated by this tradeoff between productivity and flexibility, we systematically study how code-based action abstraction affects the performance, inference cost, and learning of language agents. We study this in NetHack, a challenging, long-horizon game environment, using CodeHack, our library of code-based skills with natural-language descriptions. We use this library to compare agents restricted to primitives with those using semantic skills alone or in combination with primitives.
-                        </p>
-                        <p>
-                            We evaluate these agents in three settings: zero-shot prompting, supervised fine-tuning, and reinforcement learning. Across a broad zero-shot evaluation on NetHack, we find that compared with primitives, skills <strong>nearly triple game progression</strong>, while reducing inference cost per episode by <strong>86%</strong>. Combining skills with primitives retains much of this benefit while preserving a path back down to low-level actions.
-                        </p>
-                        <p>
-                            Finally, in RL, we find that skill-based agents learn significantly faster than agents acting on primitives, achieving a <strong>7.2× larger average gain in dungeon level</strong> over the same training budget. These results show that a supplied skill library can improve performance, efficiency, and learning, while retaining primitives provides flexibility when the library is insufficient. We release CodeHack together with training and evaluation code.
-                        </p>
+            <section class="essay-section" id="findings">
+                <div class="prose"><h2 class="section-label">What we learned</h2></div>
+                <section class="finding" id="progress">
+                    <div class="prose">
+                        <header class="finding-heading">
+                            <p class="finding-kicker"><span class="finding-number" aria-hidden="true">01</span><span>Zero-shot control</span></p>
+                            <h3>Skills improve success rates across MiniHack tasks and NetHack performance across model families.</h3>
+                        </header>
+                        <p>Skills improve success rates on every evaluated MiniHack task, with an average gain of <strong>55 percentage points</strong> over primitive control. These benefits extend to NetHack, where skills nearly triple average progression across 14 models. With skills, GPT-5 reaches dungeon level 4 in 84% of episodes, compared with 3% under primitive control. These are substantial early-game gains, but even GPT-5 with skills remains far from solving NetHack.</p>
                     </div>
-
-                    <div>
-                        <div class="figure-frame teaser-frame">
-                            <img src="figures/teaser.png" alt="Qwen-3.5-4B NetHack progression over RL gradient steps with skills and primitives; dashed lines show GPT-5 zero-shot progression" width="2400" height="1646" loading="lazy">
-                        </div>
-                        <div class="figure-caption teaser-caption">
-                            <h3>Skills vs. primitives in NetHack</h3>
-                            <p>Solid curves show Qwen-3.5-4B progression during RL; dashed lines show GPT-5 zero-shot performance for each interface. <a href="figures/teaser.pdf">View figure (PDF).</a></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="metrics" aria-label="Main result highlights">
-                    <div class="metric">
-                        <div class="metric-value">2.9×</div>
-                        <div class="metric-label">Higher zero-shot NetHack progression</div>
-                        <div class="metric-note">Skill-only vs. primitive-only, averaged across the 14-model NetHack sweep.</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">86%</div>
-                        <div class="metric-label">Lower estimated inference cost</div>
-                        <div class="metric-note">Per-episode cost reduction for skill-only control in the same zero-shot sweep.</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">7.2×</div>
-                        <div class="metric-label">Larger RL dungeon-level gain</div>
-                        <div class="metric-note">Skill-only vs. primitive-only, averaged across two models after 264 PPO gradient updates.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="motivation">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="kicker">Motivation</p>
-                        <h2>Why climb the abstraction ladder?</h2>
-                    </div>
-                </div>
-
-                <div class="story-text">
-                    <p>
-                        Language agents increasingly tackle long-horizon problems in software engineering, computer use, and embodied control. Many of these environments require long sequences of low-level actions, such as mouse clicks, keystrokes, or shell commands. Fine-grained control is expressive, but costly when every small step requires a separate model call.
-                    </p>
-                    <p>
-                        Skills package sequences of primitive actions behind a semantically meaningful interface. A fixed library can handle recurring local decisions, leaving the language model to select and combine useful behaviors. In this study, the skill implementations remain fixed: learning changes how the controller uses them.
-                    </p>
-                    <p>
-                        This suggests a central question for long-horizon language agents: <strong>what are the benefits and tradeoffs of using primitive actions, higher-level skills, or both?</strong> We study this question through temporally extended code-based actions, or skills. Code-based skills are natural for language agents: they can be described in language, inspected as source code, executed cheaply on the CPU, and combined with primitive actions when finer control is needed.
-                    </p>
-                    <p>
-                        MiniHack provides controlled tests of navigation, exploration, combat, and item use. NetHack is our main long-horizon domain: successful games span tens to hundreds of thousands of turns, and a single mistake can end a run. A practical fixed library cannot anticipate every situation, motivating agents that can <strong>move flexibly up and down the abstraction ladder</strong> when a skill is insufficient.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section id="method">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="kicker">Method</p>
-                        <h2>CodeHack turns one skill call into many game actions.</h2>
-                    </div>
-                </div>
-
-                <div class="story-text">
-                    <p>
-                        CodeHack is a library of Python skills and a shared runtime for NetHack and MiniHack. Each skill accesses structured state to issue primitive commands, such as movement, inventory interactions, prompt responses, or combat actions, and can adapt to new observations during execution. NetHack agents use a fixed repertoire of 78 skills; MiniHack uses task-specific subsets, augmented with seven skills for lava crossing and levitation.
-                    </p>
-                    <p>
-                        The runtime exposes three action interfaces: primitive-only, skill-only, and mixed. All three share symbolic state, inventory tracking, and map memory; primitive commands pass through the same execution machinery as one-step strategies. The controller receives textual observations and bounded interaction history, then chooses the next action when control returns. Skills can return control on completion, failure, interruption by a panic handler, or lack of progress, allowing the controller to select another skill or use primitives under mixed control.
-                    </p>
-                </div>
-
-                <div class="paper-method">
-                    <figure class="paper-figure">
-                        <img src="figures/codehack_v4.png" alt="CodeHack as a shared control layer for primitive-only, skill-only, and mixed agents in NetHack and MiniHack" width="1651" height="866" loading="lazy">
-                        <figcaption>
-                            CodeHack supports language-model agents and learned RL policies through natural-language
-                            control and a discrete action interface. Depending on the configured repertoire, the
-                            controller selects skills such as explore or fight_melee, primitive commands, or both.
-                            All three interfaces share the runtime, while code skills can expand into multiple
-                            primitive environment steps.
-                        </figcaption>
+                    <figure class="wide-figure">
+                        <a class="figure-surface" href="figures/nethack_minihack_combined_barplots_v3.pdf" aria-label="Open the full-size MiniHack and NetHack results"><img src="figures/nethack_minihack_combined_barplots_v3.png" width="2400" height="1221" loading="lazy" alt="GPT-5 task success in MiniHack and milestone reach in NetHack. Skills improve all seven MiniHack tasks and make deeper NetHack milestones substantially more reachable."></a>
+                        <figcaption><span class="caption-label">Zero-shot results across the two evaluation domains.</span> (Left) MiniHack success rates for GPT-5. (Right) NetHack milestone reach for GPT-5. Both plots present averages over 32 episodes per task. <a href="figures/nethack_minihack_combined_barplots_v3.pdf">View full-size figure <span aria-hidden="true">↗︎</span></a></figcaption>
                     </figure>
-
-                    <div class="principles-grid" aria-label="CodeHack design principles">
-                        <article class="principle">
-                            <h3>Semantic actions</h3>
-                            <p>Skills correspond to recognizable behaviors such as exploration, combat, equipment management, and terrain interaction.</p>
-                        </article>
-                        <article class="principle">
-                            <h3>Reusable code skills</h3>
-                            <p>Skills are reusable across many states and episodes, functioning as stable units of abstraction rather than narrow scripts.</p>
-                        </article>
-                        <article class="principle">
-                            <h3>Mixed abstraction levels</h3>
-                            <p>The interface supports moving up and down the ladder, so skills accelerate long-horizon behavior without removing local intervention.</p>
-                        </article>
+                    <div class="prose">
+                        <p>For a qualitative view of how agents use these interfaces, we examine selected GPT-5 trajectories. These include a full NetHack run with mixed control and successful solutions to seven MiniHack tasks with skill-only control.</p>
                     </div>
+                    <div class="wide-figure">
+                        <details class="demo-details">
+                            <summary>NetHack trajectory — mixed control</summary>
+                            <div class="demo-content">
+                                <figure>
+                                    <div class="video-shell"><video controls muted playsinline preload="none" poster="figures/essay/full-run-poster.jpg" aria-label="Complete GPT-5 NetHack run using both action levels and reaching dungeon depth 10"><source src="gpt5_video_showcase/nethack/full_run_depth_10.mp4" type="video/mp4">Your browser does not support embedded video. <a href="gpt5_video_showcase/nethack/full_run_depth_10.mp4">Download the full run</a>.</video></div>
+                                    <figcaption><span class="caption-label">A full NetHack trajectory.</span> GPT-5 uses skills and individual commands to reach dungeon depth 10. The video shows eight controller decisions per second. The playback rate is not the agent’s live speed.</figcaption>
+                                </figure>
+                            </div>
+                        </details>
+                        <details class="demo-details">
+                            <summary>MiniHack trajectories — skill-only control</summary>
+                            <div class="demo-content">
+                                <figure class="task-gallery" data-task-gallery>
+                                    <div class="task-gallery-heading">
+                                        <div>
+                                            <h4>MiniHack trajectories</h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="task-gallery-layout">
+                                        <div class="task-stage">
+                                            <div class="video-shell task-video-shell">
+                                                <video class="task-video" id="minihack-player" controls muted playsinline preload="metadata"
+                                                    aria-label="GPT-5 solves MiniHack Quest-Hard" poster="figures/essay/minihack-poster.jpg">
+                                                    <source src="gpt5_video_showcase/03_minihack_quest_hard_solution.mp4" type="video/mp4">
+                                                    Your browser does not support embedded video.
+                                                </video>
+                                            </div>
+
+                                            <div class="task-active-copy" aria-live="polite">
+                                                <div class="task-active-topline">
+                                                    <div class="video-meta">
+                                                        <span data-task-family>Quest</span>
+                                                        <span data-task-decisions>19 decisions</span>
+                                                        <span>Skill control</span>
+                                                    </div>
+                                                    <span class="task-count"><strong data-task-current>01</strong> / 07</span>
+                                                </div>
+                                                <h5 data-task-title>Quest-Hard solved</h5>
+                                                <p data-task-description>GPT-5 explores, collects the required tools, crosses lava, defeats the monster, and reaches the stairs.</p>
+                                            </div>
+
+                                            <div class="gallery-controls" aria-label="MiniHack task navigation">
+                                                <button class="gallery-arrow" type="button" data-gallery-prev aria-label="Show previous MiniHack task">
+                                                    <span aria-hidden="true">←</span> Previous
+                                                </button>
+                                                <button class="gallery-arrow" type="button" data-gallery-next aria-label="Show next MiniHack task">
+                                                    Next <span aria-hidden="true">→</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="task-rail" aria-label="Choose a MiniHack rollout">
+                                            <button class="task-choice is-active" type="button" aria-controls="minihack-player" aria-pressed="true"
+                                                data-src="gpt5_video_showcase/03_minihack_quest_hard_solution.mp4" data-poster="figures/essay/minihack-poster.jpg"
+                                                data-title="Quest-Hard solved"
+                                                data-family="Quest"
+                                                data-decisions="19 decisions"
+                                                data-description="GPT-5 explores, collects the required tools, crosses lava, defeats the monster, and reaches the stairs.">
+                                                <img src="figures/minihack_quest_hard_v2.png" alt="" loading="lazy">
+                                                <span class="task-choice-copy">
+                                                    <strong>Quest-Hard</strong>
+                                                    <span>19 decisions · multi-stage</span>
+                                                </span>
+                                                <span class="task-number">01</span>
+                                            </button>
+
+                                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                                data-src="gpt5_video_showcase/minihack/quest_medium.mp4"
+                                                data-title="Quest-Medium solved"
+                                                data-family="Quest"
+                                                data-decisions="18 decisions"
+                                                data-description="GPT-5 prepares at a choke point, wins the fight, collects an item, freezes the lava, and descends.">
+                                                <img src="figures/minihack_quest_medium.jpg" alt="" loading="lazy">
+                                                <span class="task-choice-copy">
+                                                    <strong>Quest-Medium</strong>
+                                                    <span>18 decisions · combat + tools</span>
+                                                </span>
+                                                <span class="task-number">02</span>
+                                            </button>
+
+                                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                                data-src="gpt5_video_showcase/minihack/quest_easy.mp4"
+                                                data-title="Quest-Easy solved"
+                                                data-family="Quest"
+                                                data-decisions="5 decisions"
+                                                data-description="GPT-5 picks up a tool, freezes the lava river, explores the far side, and reaches the stairs.">
+                                                <img src="figures/minihack_quest_easy.jpg" alt="" loading="lazy">
+                                                <span class="task-choice-copy">
+                                                    <strong>Quest-Easy</strong>
+                                                    <span>5 decisions · item use</span>
+                                                </span>
+                                                <span class="task-number">03</span>
+                                            </button>
+
+                                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                                data-src="gpt5_video_showcase/minihack/corridor_r3.mp4"
+                                                data-title="Corridor-R3 solved"
+                                                data-family="Corridor"
+                                                data-decisions="6 decisions"
+                                                data-description="A short successful run through a three-room corridor task using semantic navigation skills.">
+                                                <img src="figures/minihack_corridor_r3.jpg" alt="" loading="lazy">
+                                                <span class="task-choice-copy">
+                                                    <strong>Corridor-R3</strong>
+                                                    <span>6 decisions · navigation</span>
+                                                </span>
+                                                <span class="task-number">04</span>
+                                            </button>
+
+                                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                                data-src="gpt5_video_showcase/minihack/corridor_r5.mp4"
+                                                data-title="Corridor-R5 solved"
+                                                data-family="Corridor"
+                                                data-decisions="7 decisions"
+                                                data-description="GPT-5 traverses a five-room corridor task in seven high-level controller decisions.">
+                                                <img src="figures/minihack_corridor_r5.jpg" alt="" loading="lazy">
+                                                <span class="task-choice-copy">
+                                                    <strong>Corridor-R5</strong>
+                                                    <span>7 decisions · navigation</span>
+                                                </span>
+                                                <span class="task-number">05</span>
+                                            </button>
+
+                                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                                data-src="gpt5_video_showcase/minihack/corridor_r10.mp4"
+                                                data-title="Corridor-R10 solved"
+                                                data-family="Corridor"
+                                                data-decisions="8 decisions"
+                                                data-description="A ten-room navigation task is compressed into eight skill-level decisions.">
+                                                <img src="figures/minihack_corridor_r10.jpg" alt="" loading="lazy">
+                                                <span class="task-choice-copy">
+                                                    <strong>Corridor-R10</strong>
+                                                    <span>8 decisions · long corridor</span>
+                                                </span>
+                                                <span class="task-number">06</span>
+                                            </button>
+
+                                            <button class="task-choice" type="button" aria-controls="minihack-player" aria-pressed="false"
+                                                data-src="gpt5_video_showcase/minihack/wod_hard.mp4"
+                                                data-title="WoD-Hard solved"
+                                                data-family="Combat"
+                                                data-decisions="5 decisions"
+                                                data-description="GPT-5 collects a wand, approaches the monster, uses ranged magic, and descends.">
+                                                <img src="figures/minihack_wod_hard.jpg" alt="" loading="lazy">
+                                                <span class="task-choice-copy">
+                                                    <strong>WoD-Hard</strong>
+                                                    <span>5 decisions · ranged combat</span>
+                                                </span>
+                                                <span class="task-number">07</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <figcaption><span class="caption-label">Trajectories across seven MiniHack tasks.</span> MiniHack uses the same game world to create smaller tasks. These selected successful trajectories show navigation, combat, and tool use. The decision counts refer to the agent choosing a skill, which may execute several game actions.</figcaption>
+                                </figure>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <section class="finding" id="cost">
+                    <div class="prose">
+                        <header class="finding-heading">
+                            <p class="finding-kicker"><span class="finding-number" aria-hidden="true">02</span><span>Inference cost</span></p>
+                            <h3>Skills improve the performance-cost frontier, enabling agents to make more progress at lower inference cost.</h3>
+                        </header>
+                        <p>Averaged across models, skills reduce inference cost per episode by <strong>86%</strong> relative to primitives. Skills lower inference cost by reducing the number of LM calls per episode by an average factor of <strong>5.1</strong>. Adding primitives alongside skills preserves most of these performance benefits, although at a higher inference cost than skill-only control.</p>
+                    </div>
+                    <figure class="wide-figure">
+                        <a class="figure-surface" href="figures/nethack_zero_shot_dlvl_vs_cost_v6.pdf" aria-label="Open the full-size progress and cost figure"><img src="figures/nethack_zero_shot_dlvl_vs_cost_v6.png" width="2400" height="1417" loading="lazy" alt="Average maximum dungeon depth against estimated inference cost per episode. For most models, skill-based control reaches deeper at lower cost than primitive-only control."></a>
+                        <figcaption><span class="caption-label">Pareto frontier.</span> Each point represents a model evaluated with a particular action interface, showing its average dungeon level reached against its average inference cost per episode. For most models, switching from primitives to skills increases dungeon depth while reducing inference cost. <a href="figures/nethack_zero_shot_dlvl_vs_cost_v6.pdf">View full-size figure <span aria-hidden="true">↗︎</span></a></figcaption>
+                    </figure>
+                    <div class="prose">
+                        <p>We report token usage and estimated inference cost per episode, using OpenRouter input and output token prices.</p>
+                    </div>
+                </section>
+
+                <section class="finding" id="learning">
+                    <div class="prose">
+                        <header class="finding-heading">
+                            <p class="finding-kicker"><span class="finding-number" aria-hidden="true">03</span><span>Learning with RL</span></p>
+                            <h3>The benefits of skills extend to learning. RL amplifies the performance gap between skill-based control and primitive-only control.</h3>
+                        </header>
+                        <p>Under a fixed RL budget in NetHack, skill-only and mixed controllers achieve gains in dungeon depth <strong>7.2 and 8.6 times</strong> those of primitive-only controllers, respectively, averaged across two models. These larger gains widen the absolute performance gap already present in zero-shot evaluation.</p>
+                    </div>
+                    <figure class="wide-figure">
+                        <a class="figure-surface" href="figures/rl_progression_score_max_dlvl_vs_grad_steps_qwen3p5_4b.pdf" aria-label="Open the full-size learning figure"><img src="figures/rl_progression_score_max_dlvl_vs_grad_steps_qwen3p5_4b.png" width="2400" height="647" loading="lazy" alt="Qwen-3.5-4B learning curves for progression, score, and maximum dungeon depth. Skill-only and mixed controllers increase their lead over primitive-only control during PPO training."></a>
+                        <figcaption><span class="caption-label">Full training curves for Qwen-3.5-4B (gradient steps).</span> We plot progression (left), score (middle), and dungeon level (right) vs. gradient steps. All curves are averages across three seeds (except for mixed, which uses 2 seeds), and error bands indicate one standard error. <a href="figures/rl_progression_score_max_dlvl_vs_grad_steps_qwen3p5_4b.pdf">View full-size figure <span aria-hidden="true">↗︎</span></a></figcaption>
+                    </figure>
+                    <div class="prose">
+                        <p>We compare policies at a common checkpoint after 264 gradient updates. Skills can execute multiple primitive actions per decision, so equal rollout lengths can involve different numbers of primitive environment transitions.</p>
+                    </div>
+                </section>
+
+                <section class="finding" id="fallback">
+                    <div class="prose">
+                        <header class="finding-heading">
+                            <p class="finding-kicker"><span class="finding-number" aria-hidden="true">04</span><span>Incomplete skill coverage</span></p>
+                            <h3>Retaining access to primitive actions helps compensate for incomplete skill coverage.</h3>
+                        </header>
+                        <p>Mixed control is generally less affected by missing skills than skill-only control. Access to primitives therefore mitigates the loss of supplied skills, but does not guarantee successful recovery.</p>
+                    </div>
+                    <figure class="wide-figure">
+                        <a class="figure-surface" href="figures/skill_family_ablation_comparison_gemma4_31b_v3.pdf" aria-label="Open the full-size skill-removal results"><img src="figures/skill_family_ablation_comparison_gemma4_31b_v3.png" width="2400" height="1107" loading="lazy" alt="Gemma-4-31B progression, score, and dungeon depth with a full library and with individual skill families removed. Mixed control generally suffers less from missing skills than skill-only control."></a>
+                        <figcaption><span class="caption-label">Sensitivity to incomplete skill coverage for zero-shot Gemma-4-31B on NetHack.</span> The full baseline uses all 78 skills. Each other condition removes the named skill family. Mixed control retains primitive actions. Bars show means over 64 episodes per condition. The comparison measures sensitivity to missing skill families and the extent to which primitive alternatives preserve performance. <a href="figures/skill_family_ablation_comparison_gemma4_31b_v3.pdf">View full-size figure <span aria-hidden="true">↗︎</span></a></figcaption>
+                    </figure>
+                    <div class="prose">
+                        <p>For a qualitative analysis of primitive fallback, we examine two selected NetHack trajectories. Both show how an agent uses primitives to resolve a situation that the available skills cannot handle, then returns to skills.</p>
+                        <details class="evidence-details" id="vault-example">
+                            <summary>Vault trajectory — primitive fallback</summary>
+                            <div class="evidence-body">
+                                <p>In the first trajectory, the agent encounters a vault guard, but the library lacks a skill for dropping gold to satisfy the guard’s demand. After several unproductive calls, the agent uses primitives to drop the gold and move along the exit corridor, then resumes navigation with <code>explore</code>.</p>
+                                <figure class="recovery-demo">
+                                    <video controls muted playsinline preload="none" poster="figures/essay/vault-poster.jpg" aria-label="Agent drops gold using individual commands, then returns to an exploration skill" aria-describedby="vault-caption"><source src="gpt5_video_showcase/04_vault_drop_gold_recovery.mp4" type="video/mp4">Your browser does not support embedded video. <a href="gpt5_video_showcase/04_vault_drop_gold_recovery.mp4">Download this demonstration</a>.</video>
+                                    <div class="recovery-steps"><div class="recovery-step"><span class="step-number">01</span><strong>Skill limitation</strong><p>The guard repeats its demand to drop the gold, but no drop-gold skill is available.</p></div><div class="recovery-step"><span class="step-number">02</span><strong>Primitive fallback</strong><p><code>drop</code>, <code>$</code> drop all 650 gold pieces. <code>east</code> follows the corridor.</p></div><div class="recovery-step"><span class="step-number">03</span><strong>Return to skills</strong><p><code>explore</code> resumes navigation.</p></div></div>
+                                    <figcaption id="vault-caption"><span class="caption-label">Vault trajectory — primitive fallback.</span> The agent uses primitives to supply a behavior absent from the skill library. Playback is sped up.</figcaption>
+                                </figure>
+                            </div>
+                        </details>
+                        <details class="evidence-details" id="combat-example">
+                            <summary>Ranged-combat trajectory — primitive fallback</summary>
+                            <div class="evidence-body">
+                                <p>When <code>fight_ranged</code> returns without acting, the agent throws a javelin using primitives, then calls <code>pickup_weapon</code> to recover its weapons.</p>
+                                <video controls muted playsinline preload="none" poster="figures/essay/combat-poster.jpg" aria-label="Agent recovers from a failed combat skill by throwing a javelin through individual commands"><source src="gpt5_video_showcase/01_nethack_mixed_control.mp4" type="video/mp4">Your browser does not support embedded video. <a href="gpt5_video_showcase/01_nethack_mixed_control.mp4">Download this demonstration</a>.</video>
+                            </div>
+                        </details>
+                        <p>Mixed control requires the agent to choose when to use skills and when to act directly. These trajectories show useful recoveries. Their frequency and how RL changes those choices require further analysis.</p>
+                    </div>
+                </section>
+            </section>
+
+            <section class="essay-section" id="future">
+                <div class="prose">
+                    <h2 class="section-label">What comes next</h2>
+                    <p>Our agents are still far from solving NetHack. The skills we provide cannot cover every situation, and the game demands knowledge, resource management, and planning beyond what those skills encode. Access to individual actions helps agents work around gaps in the library. Deciding when to use that flexibility remains a challenge.</p>
+                    <p>A promising direction is to let agents develop the skills themselves. They could identify recurring failures, write code for missing behaviors, and test and refine it through interaction. The library could then grow to cover situations that its original designers had not anticipated.</p>
+                    <p>Agents could also build tools for retrieving information from memory. Code could track previously observed items, creatures, and places, and bring back the details needed for a decision without repeatedly presenting the entire history to the model. Combining skill creation, access to relevant memories, and the ability to act directly offers a possible path toward solving NetHack.</p>
                 </div>
-            </div>
-        </section>
+            </section>
+        </article>
 
-        <section id="experiments">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="kicker">Experiments</p>
-                        <h2>We test performance, inference cost, skill coverage, and learning.</h2>
-                    </div>
-                </div>
-
-                <div class="story-text">
-                    <p>
-                        We compare primitives, skills, and mixed control across 14 models from five families in zero-shot NetHack evaluation, and skills versus primitives on seven MiniHack tasks using GPT-5. We also test missing skill families and train two models with PPO, with an additional SFT initialization experiment for skill-only control. Within each task, game parameters, observation format, and prompt template stay fixed across interfaces; the available actions and their descriptions change.
-                    </p>
-                    <p>
-                        We measure MiniHack success rate and NetHack score, progression, and maximum dungeon level, alongside token use and estimated inference cost. Progression estimates game progress from the highest dungeon and experience levels reached, using a mapping derived from human trajectories. The zero-shot NetHack summaries are unweighted averages across models.
-                    </p>
-                </div>
-
-                <article class="experiment-block" id="zero-shot-results">
-                    <div class="result-subhead">
-                        <div>
-                            <p class="kicker">Zero-Shot Gains</p>
-                            <h2>Skills improve task success in MiniHack and game progress in NetHack.</h2>
-                        </div>
-                    </div>
-
-                    <p class="result-copy">
-                        With GPT-5 on MiniHack, CodeHack skills improve success on every evaluated task, with an average absolute gain of 55 percentage points over primitive control. On Quest-Hard, skills reach 25% success while primitives solve no episodes. Across the 14-model NetHack sweep, skill-only agents achieve 2.9× the progression, 3.8× the score, and 2.4× the dungeon depth of primitive-only agents on average.
-                    </p>
-                    <p class="result-copy">
-                        GPT-5 with skills reaches dungeon level 4 in 84% of episodes, compared with 3% under primitive control, and reaches the Gnomish Mines in 47% versus 3%. These are substantial early-game gains, though even the strongest evaluated agents remain far from solving NetHack.
-                    </p>
-
-                    <div class="figure-frame">
-                        <img src="figures/nethack_minihack_combined_barplots_v3.png" alt="GPT-5 zero-shot MiniHack success rates and NetHack milestone reach, comparing skills with primitives" width="2400" height="1221" loading="lazy">
-                    </div>
-                    <div class="figure-caption">
-                        <h3>Zero-shot results across MiniHack and NetHack</h3>
-                        <p>Left: MiniHack success rates for GPT-5. Right: NetHack milestone reach for GPT-5. Both plots present averages over 32 episodes per task. <a href="figures/nethack_minihack_combined_barplots_v3.pdf">View figure (PDF).</a></p>
-                    </div>
-                </article>
-
-                <article class="experiment-block" id="cost-results">
-                    <div class="result-subhead">
-                        <div>
-                            <p class="kicker">Performance-Cost Frontier</p>
-                            <h2>Skills reach deeper dungeon levels at lower or comparable cost.</h2>
-                        </div>
-                    </div>
-
-
-                    <p class="result-copy">
-                        For most models, switching from primitives to skills reaches deeper dungeon levels at lower inference cost per episode. Averaged across the NetHack sweep, skills reduce estimated inference cost by 86% and token use by 74%. They require 5.1× fewer language-model calls per episode on average, because code skills execute many environment steps on the CPU. Cost estimates use the OpenRouter input and output token prices reported in the paper.
-                    </p>
-
-                    <div class="figure-frame">
-                        <img src="figures/nethack_zero_shot_dlvl_vs_cost_v6.png" alt="Average maximum NetHack dungeon level versus estimated inference cost per episode for 14 models and three action interfaces" width="2400" height="1417" loading="lazy">
-                    </div>
-                    <div class="figure-caption">
-                        <h3>Zero-shot NetHack cost-performance frontier</h3>
-                        <p>Each point corresponds to a model-interface pair and plots average dungeon level reached against average inference cost per episode. Skill-based agents define the strongest frontier, while mixed control is typically intermediate. <a href="figures/nethack_zero_shot_dlvl_vs_cost_v6.pdf">View figure (PDF).</a></p>
-                    </div>
-                </article>
-
-                <article class="experiment-block" id="mixed-control-results">
-                    <div class="result-subhead">
-                        <div>
-                            <p class="kicker">Mixed Control</p>
-                            <h2>Primitive fallback helps when the skill library is incomplete.</h2>
-                        </div>
-                    </div>
-
-                    <p class="result-copy">
-                        Mixed control retains 95% of skill-only progression, 91% of score, and 97% of dungeon depth in the zero-shot NetHack sweep. It remains much stronger than primitives alone, but costs 2.3× as much and uses 2× as many tokens as skill-only control on average.
-                    </p>
-                    <p class="result-copy">
-                        Removing one skill family at a time from Gemma-4-31B’s library generally hurts mixed control less than skill-only control. Primitive actions provide alternatives when a behavior is missing, although they do not guarantee recovery. Removing exploration, navigation, and search—including staircase skills—has the largest effect on progression and dungeon depth under mixed control.
-                    </p>
-
-                    <div class="figure-frame">
-                        <img src="figures/skill_family_ablation_comparison_gemma4_31b_v3.png" alt="Gemma-4-31B NetHack performance with the full skill library and with individual skill families removed, comparing skills and mixed control" width="2400" height="1107" loading="lazy">
-                    </div>
-                    <div class="figure-caption">
-                        <h3>Sensitivity to incomplete skill coverage</h3>
-                        <p>The full baseline uses 78 skills; each other condition removes one skill family. Bars show means over 64 episodes per condition. Mixed control retains access to primitives after each removal. <a href="figures/skill_family_ablation_comparison_gemma4_31b_v3.pdf">View figure (PDF).</a></p>
-                    </div>
-                </article>
-
-                <article class="experiment-block" id="rl-results">
-                    <div class="result-subhead">
-                        <div>
-                            <p class="kicker">Faster Learning</p>
-                            <h2>RL amplifies the performance gap between skill-based control and primitive-only control.</h2>
-                        </div>
-                    </div>
-
-
-                    <p class="result-copy">
-                        PPO training on Llama-3.1-8B-Instruct and Qwen-3.5-4B shows that skills also help learned controllers. At a common checkpoint after 264 gradient updates, the average gain in dungeon level is 7.2× larger for skill-only control and 8.6× larger for mixed control than for primitives. These gains widen the absolute performance gap already present before training.
-                    </p>
-                    <p class="result-copy">
-                        Both models use act-only control in this comparison, including their zero-shot baselines. The learning curves show faster improvement with skills and mixed control against both gradient updates and wall-clock time. Skills can execute multiple primitive actions per decision, so equal rollout lengths do not imply equal numbers of primitive environment transitions.
-                    </p>
-
-                    <div class="figure-frame">
-                        <img src="figures/rl_progression_score_max_dlvl_vs_grad_steps_qwen3p5_4b.png" alt="Qwen-3.5-4B progression, score, and maximum dungeon level over PPO gradient steps for skills, mixed control, and primitives" width="2400" height="647" loading="lazy">
-                    </div>
-                    <div class="figure-caption">
-                        <h3>RL training curves for Qwen-3.5-4B</h3>
-                        <p>Progression, score, and dungeon level versus gradient steps. Curves average three training seeds for skills and primitives and two for mixed control; shaded bands show one standard error. <a href="figures/rl_progression_score_max_dlvl_vs_grad_steps_qwen3p5_4b.pdf">View figure (PDF).</a></p>
-                    </div>
-                </article>
-
-                <article class="experiment-block" id="sft-results">
-                    <div class="result-subhead">
-                        <div>
-                            <p class="kicker">Learning from Demonstrations</p>
-                            <h2>SFT initialization improves final skill-only RL performance.</h2>
-                        </div>
-                    </div>
-
-                    <p class="result-copy">
-                        We fine-tune both models for one epoch on 1,024 zero-shot teacher trajectories from Gemma-4-31B, then run PPO. At the same RL checkpoint, SFT initialization raises mean progression from 3.45% to 4.46% for Llama-3.1-8B-Instruct and from 4.36% to 5.25% for Qwen-3.5-4B—relative improvements of 29% and 20%. Mean scores increase by approximately 51% for both models.
-                    </p>
-                    <p class="result-copy">
-                        The stronger starting policies lead to better final performance within the evaluated RL budget, although SFT adds demonstration collection and supervised training costs. The skill library remains fixed throughout: the agents learn how to use and combine the supplied skills.
-                    </p>
-                </article>
-            </div>
-        </section>
-
-        <section id="citation">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="kicker">Citation</p>
-                        <h2>Cite this work.</h2>
-                    </div>
-                </div>
-
-                <pre><code>@misc{cupial2026abstractionladder,
-  title = {Up and Down the Abstraction Ladder: Code-Based Skills for Language Agents},
-  author = {Cupia{\l}, Bart{\l}omiej and Tuyls, Jens and Wo{\l}czyk, Maciej and Paglieri, Davide and Klissarov, Martin and Eysenbach, Benjamin and Mi{\l}o{\'s}, Piotr and Narasimhan, Karthik R.},
-  year = {2026},
-  eprint = {2609.31076},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.AI},
-  doi = {10.48550/arXiv.2609.31076},
-  url = {https://arxiv.org/abs/2609.31076}
-}</code></pre>
-            </div>
+        <section id="citation" class="essay-section" aria-label="Citation">
+            <div class="citation-panel"><h2>Cite this work</h2><div class="citation-heading"><h3>BibTeX</h3><button class="copy-button" type="button" data-copy-citation>Copy citation</button></div><pre><code id="citation-text">@article{cupial2026up,
+  title={Up and Down the Abstraction Ladder: Code-Based Skills for Language Agents},
+  author={Cupia{\l}, Bart{\l}omiej and Tuyls, Jens and Wo{\l}czyk, Maciej and Paglieri, Davide and Klissarov, Martin and Eysenbach, Benjamin and Mi{\l}o{\'s}, Piotr and Narasimhan, Karthik R},
+  journal={arXiv preprint arXiv:2609.31076},
+  year={2026}
+}</code></pre><p class="copy-status" data-copy-status role="status" aria-live="polite"></p></div>
         </section>
     </main>
-
-    <footer>
-        <div class="container">
-            Project page for Up and Down the Abstraction Ladder: Code-Based Skills for Language Agents.
-        </div>
-    </footer>
+    <footer><div class="footer-inner"><span>Up and Down the Abstraction Ladder</span><a href="#top">Back to the beginning <span aria-hidden="true">↑</span></a></div></footer>
 </body>
 </html>
