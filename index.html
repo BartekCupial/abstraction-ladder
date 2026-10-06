@@ -348,9 +348,6 @@
                         <a class="figure-surface" href="figures/nethack_zero_shot_dlvl_vs_cost_v6.pdf" aria-label="Open the full-size progress and cost figure"><img src="figures/nethack_zero_shot_dlvl_vs_cost_v6.png" width="2400" height="1417" loading="lazy" alt="Average maximum dungeon depth against estimated inference cost per episode. For most models, skill-based control reaches deeper at lower cost than primitive-only control."></a>
                         <figcaption><span class="caption-label">Pareto frontier.</span> Each point represents a model evaluated with a particular action interface, showing its average dungeon level reached against its average inference cost per episode. For most models, switching from primitives to skills increases dungeon depth while reducing inference cost. <a href="figures/nethack_zero_shot_dlvl_vs_cost_v6.pdf">View full-size figure <span aria-hidden="true">↗︎</span></a></figcaption>
                     </figure>
-                    <div class="prose">
-                        <p>We report token usage and estimated inference cost per episode, using OpenRouter input and output token prices.</p>
-                    </div>
                 </section>
 
                 <section class="finding" id="learning">
@@ -365,9 +362,6 @@
                         <a class="figure-surface" href="figures/rl_progression_score_max_dlvl_vs_grad_steps_qwen3p5_4b.pdf" aria-label="Open the full-size learning figure"><img src="figures/rl_progression_score_max_dlvl_vs_grad_steps_qwen3p5_4b.png" width="2400" height="647" loading="lazy" alt="Qwen-3.5-4B learning curves for progression, score, and maximum dungeon depth. Skill-only and mixed controllers increase their lead over primitive-only control during PPO training."></a>
                         <figcaption><span class="caption-label">Full training curves for Qwen-3.5-4B (gradient steps).</span> We plot progression (left), score (middle), and dungeon level (right) vs. gradient steps. All curves are averages across three seeds (except for mixed, which uses 2 seeds), and error bands indicate one standard error. <a href="figures/rl_progression_score_max_dlvl_vs_grad_steps_qwen3p5_4b.pdf">View full-size figure <span aria-hidden="true">↗︎</span></a></figcaption>
                     </figure>
-                    <div class="prose">
-                        <p>We compare policies at a common checkpoint after 264 gradient updates. Skills can execute multiple primitive actions per decision, so equal rollout lengths can involve different numbers of primitive environment transitions.</p>
-                    </div>
                 </section>
 
                 <section class="finding" id="fallback">
@@ -390,15 +384,13 @@
                                 <p>In the first trajectory, the agent encounters a vault guard, but the library lacks a skill for dropping gold to satisfy the guard’s demand. After several unproductive calls, the agent uses primitives to drop the gold and move along the exit corridor, then resumes navigation with <code>explore</code>.</p>
                                 <figure class="recovery-demo">
                                     <video controls muted playsinline preload="none" poster="figures/essay/vault-poster.jpg" aria-label="Agent drops gold using individual commands, then returns to an exploration skill" aria-describedby="vault-caption"><source src="gpt5_video_showcase/04_vault_drop_gold_recovery.mp4" type="video/mp4">Your browser does not support embedded video. <a href="gpt5_video_showcase/04_vault_drop_gold_recovery.mp4">Download this demonstration</a>.</video>
-                                    <div class="recovery-steps"><div class="recovery-step"><span class="step-number">01</span><strong>Skill limitation</strong><p>The guard repeats its demand to drop the gold, but no drop-gold skill is available.</p></div><div class="recovery-step"><span class="step-number">02</span><strong>Primitive fallback</strong><p><code>drop</code>, <code>$</code> drop all 650 gold pieces. <code>east</code> follows the corridor.</p></div><div class="recovery-step"><span class="step-number">03</span><strong>Return to skills</strong><p><code>explore</code> resumes navigation.</p></div></div>
-                                    <figcaption id="vault-caption"><span class="caption-label">Vault trajectory — primitive fallback.</span> The agent uses primitives to supply a behavior absent from the skill library. Playback is sped up.</figcaption>
                                 </figure>
                             </div>
                         </details>
                         <details class="evidence-details" id="combat-example">
                             <summary>Ranged-combat trajectory — primitive fallback</summary>
                             <div class="evidence-body">
-                                <p>When <code>fight_ranged</code> returns without acting, the agent throws a javelin using primitives, then calls <code>pickup_weapon</code> to recover its weapons.</p>
+                                <p>In the second trajectory, the agent faces a ranged combat situation where the <code>fight_ranged</code> skill returns without acting, the agent throws a javelin using primitives, then calls <code>pickup_weapon</code> to recover its weapons.</p>
                                 <video controls muted playsinline preload="none" poster="figures/essay/combat-poster.jpg" aria-label="Agent recovers from a failed combat skill by throwing a javelin through individual commands"><source src="gpt5_video_showcase/01_nethack_mixed_control.mp4" type="video/mp4">Your browser does not support embedded video. <a href="gpt5_video_showcase/01_nethack_mixed_control.mp4">Download this demonstration</a>.</video>
                             </div>
                         </details>
